@@ -20,7 +20,7 @@ pipeline {
         stage('Authenticate with GCP') {
             steps {
                 script {
-                    withGoogleRobotCredentials(credentialsId: 'gcp-service-account-key', project: 'GOOGLE_PROJECT_ID') {
+                    withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                         sh("gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}")
                     }
                 }
