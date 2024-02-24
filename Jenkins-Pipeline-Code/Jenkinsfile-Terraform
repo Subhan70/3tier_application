@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        gcloud 'gcloud'
+    }
+
     environment {
         CLOUDSDK_CORE_PROJECT = 'three-tier-multicloud'
     }
