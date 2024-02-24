@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        GOOGLE_PROJECT_ID = 'three-tier-multicloud'
         GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-service-account-key') // Credential ID for GCP service account key
         AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
         AWS_BUCKET_TF_STATE = credentials('aws-bucket-tf-state')
@@ -19,7 +20,7 @@ pipeline {
         stage('Authenticate with GCP') {
             steps {
                 script {
-                    withGoogleRobotCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                    withGoogleRobotCredentials(credentialsId: 'gcp-service-account-key', project: 'GOOGLE_PROJECT_ID') {
                         sh("gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}")
                     }
                 }
