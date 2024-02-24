@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        gcloud 'gcloud'
+    }
+
     environment {
         GOOGLE_PROJECT_ID = 'three-tier-multicloud'
         GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-service-account-key') // Credential ID for GCP service account key
@@ -21,9 +25,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-                        withEnv(['GCLOUD_PATH=/var/jenkins_home/google-cloud-sdk/bin']) {
-                            sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
-                        }
+                        sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
                     }
                 }   
             }
