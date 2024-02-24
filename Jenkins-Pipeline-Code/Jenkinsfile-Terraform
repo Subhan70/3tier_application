@@ -4,9 +4,9 @@ pipeline {
     environment {
         GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-service-account-key') // Credential ID for GCP service account key
         AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
-        AWS_BUCKET_TF_STATE: credentials('aws-bucket-tf-state')
-        AZURE_BUCKET_TF_STATE: credentials('azure-bucket-tf-state')
-        GCP_BUCKET_TF_STATE: credentials('gcp-tf-state')
+        AWS_BUCKET_TF_STATE = credentials('aws-bucket-tf-state')
+        AZURE_BUCKET_TF_STATE = credentials('azure-bucket-tf-state')
+        GCP_BUCKET_TF_STATE = credentials('gcp-tf-state')
     }
 
     stages {
