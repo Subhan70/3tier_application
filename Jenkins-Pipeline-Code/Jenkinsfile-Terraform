@@ -16,6 +16,16 @@ pipeline {
             }
         }
 
+        stage('Gcloud version') {
+            steps {
+                script {
+                    sh '''
+                        gcloud version
+                    '''
+                }
+            }
+        }
+
         stage('Authenticate with GCP') {
             steps {
                 script {
