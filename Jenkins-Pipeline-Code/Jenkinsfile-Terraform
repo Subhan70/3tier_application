@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        GOOGLE_PROJECT_ID = 'three-tier-multicloud'
+        CLOUDSDK_CORE_PROJECT = 'three-tier-multicloud'
     }
 
     stages {
