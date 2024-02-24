@@ -5,10 +5,6 @@ pipeline {
         gcloud 'gcloud'
     }
 
-    environment {
-        CLOUDSDK_CORE_PROJECT = 'three-tier-multicloud'
-    }
-
     stages {
         stage('Checkout Source Code') {
             steps {
@@ -18,17 +14,9 @@ pipeline {
 
         stage('Install Google Cloud SDK') {
             steps {
-                sh '''
-                    curl https://sdk.cloud.google.com | bash
-                '''
-            }
-        }
-        
-        stage('Initialize Google Cloud SDK') {
-            steps {
-                sh '''
-                    gcloud init -q
-                '''
+                sh 'curl https://sdk.cloud.google.com | bash'
+                sh 'exec -l $SHELL'
+                sh 'gcloud init' // Initialize Google Cloud SDK
             }
         }
 
