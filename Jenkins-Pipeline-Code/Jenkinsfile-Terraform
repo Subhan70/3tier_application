@@ -15,7 +15,9 @@ pipeline {
         stage('Initialize Terraform') {
             steps {
                 dir('./terraform') {
-                    sh 'terraform init'
+                    withAWS(credentials: 'aws-access-key-id', region: 'us-east-1') {
+                        sh 'terraform init'
+                    }
                 }
             }
         }
@@ -23,7 +25,9 @@ pipeline {
         stage('Terraform Format') {
             steps {
                 dir('./terraform') {
-                    sh 'terraform fmt -check'
+                    withAWS(credentials: 'aws-access-key-id', region: 'us-east-1') {
+                        sh 'terraform fmt -check'
+                    }
                 }
             }
         }
@@ -31,7 +35,9 @@ pipeline {
         stage('Terraform Validate') {
             steps {
                 dir('./terraform') {
-                    sh 'terraform validate'
+                    withAWS(credentials: 'aws-access-key-id', region: 'us-east-1') {
+                        sh 'terraform validate'
+                    }
                 }
             }
         }
@@ -39,7 +45,9 @@ pipeline {
         stage('Terraform Plan') {
             steps {
                 dir('./terraform') {
-                    sh 'terraform plan -no-color -input=false -out planfile'
+                    withAWS(credentials: 'aws-access-key-id', region: 'us-east-1') {
+                        sh 'terraform plan -no-color -input=false -out planfile'
+                    }
                 }
             }
         }
