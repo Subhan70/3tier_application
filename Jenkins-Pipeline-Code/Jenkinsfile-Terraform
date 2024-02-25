@@ -5,6 +5,10 @@ pipeline {
         terraform "terraform"
     }
 
+    environment {
+        AWS_BUCKET_TF_STATE = 'aws-bucket-tf-state'
+    }
+
     stages {
         stage('Checkout Source Code') {
             steps {
@@ -12,12 +16,10 @@ pipeline {
             }
         }
 
-        stage('Initialize Terraform to AWS bucket') {
+        stage('Initialize Terraform') {
             steps {
                 dir('./terraform') {
-                     withCredentials([string(credentialsId: 'aws-bucket-tf-state', variable: 'AWS_BUCKET_TF_STATE')]) {
-                        sh 'terraform init -backend-config=${AWS_BUCKET_TF_STATE}'
-                     }
+                    sh 'terraform init -backend-config=${AWS_BUCKET_TF_STATE}'
                 }
             }
         }
