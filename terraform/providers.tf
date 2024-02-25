@@ -27,7 +27,7 @@ terraform {
  #   region = "us-east-1" # This is the AWS default, but can be set to any valid AWS region.
  # }
 
-  required_version = ">=1.6.3, <1.8.0"
+  required_version = "~> 1.6.3"
 }
 ##
 ##
