@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        terraform : "terraform"
+    }
+
     stages {
         stage('Checkout Source Code') {
             steps {
