@@ -14,7 +14,7 @@ pipeline {
 
         stage('Initialize Terraform') {
             steps {
-                script {
+                dir('./terraform') {
                     sh 'terraform init -backend-config=${AWS_BUCKET_TF_STATE}'
                     sh 'terraform init -backend-config=${AZURE_BUCKET_TF_STATE}'
                     sh 'terraform init -backend-config=${GCP_BUCKET_TF_STATE}'
@@ -24,7 +24,7 @@ pipeline {
 
         stage('Terraform Format') {
             steps {
-                script {
+                dir('./terraform') {
                     sh 'terraform fmt -check'
                 }
             }
@@ -32,7 +32,7 @@ pipeline {
 
         stage('Terraform Validate') {
             steps {
-                script {
+                dir('./terraform') {
                     sh 'terraform validate'
                 }
             }
@@ -40,7 +40,7 @@ pipeline {
 
         stage('Terraform Plan') {
             steps {
-                script {
+                dir('./terraform') {
                     sh 'terraform plan -no-color -input=false -out planfile'
                 }
             }
