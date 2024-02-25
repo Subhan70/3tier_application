@@ -15,7 +15,7 @@ pipeline {
         stage('Authenticate with GCP') {
             steps {
                 script {
-                    withCredentials([[$class: 'FileBinding', credentialsId: 'gcp-service-account-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS']]) {
+                    withCredentials([googleServiceAccount(credentialsId: 'gcp-service-account-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                         sh '''
                             gcloud auth activate-service-account --key-file="$GOOGLE_APPLICATION_CREDENTIALS"
                         '''
