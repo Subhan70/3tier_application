@@ -1,23 +1,11 @@
 pipeline {
     agent any
 
-    tools {
-        gcloud 'gcloud'
-    }
-
     stages {
         stage('Checkout Source Code') {
             steps {
                 checkout scm
             }
-        }
-
-        stage('Authenticate with GCP') {
-            steps {
-                script {
-                        sh "gcloud version"
-                }
-            }   
         }
 
         stage('Setup Terraform') {
