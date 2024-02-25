@@ -21,11 +21,11 @@ terraform {
     }
   }
 
- # backend "s3" {
- #   bucket = "three-tier-multicloud"
- #   key    = "terraform.tfstate"
- #   region = "us-east-1" # This is the AWS default, but can be set to any valid AWS region.
- # }
+  backend "s3" {
+    bucket = "three-tier-multicloud"
+    key    = "terraform.tfstate"
+    region = "us-east-1" # This is the AWS default, but can be set to any valid AWS region.
+  }
 
   required_version = "~> 1.6.3"
 }

@@ -22,26 +22,6 @@ pipeline {
             }
         }
 
-        stage('Initialize Terraform to Azure bucket') {
-            steps {
-                dir('./terraform') {
-                     withCredentials([string(credentialsId: 'azure-bucket-tf-state', variable: 'AZURE_BUCKET_TF_STATE')]) {
-                        sh 'terraform init -backend-config=${AZURE_BUCKET_TF_STATE}'
-                     }
-                }
-            }
-        }
-
-        stage('Initialize Terraform to GCP bucket') {
-            steps {
-                dir('./terraform') {
-                    withCredentials([string(credentialsId: 'gcp-tf-state', variable: 'GCP_BUCKET_TF_STATE')]) {
-                        sh 'terraform init -backend-config=${GCP_BUCKET_TF_STATE}'
-                    }
-                }
-            }
-        }
-
         stage('Terraform Format') {
             steps {
                 dir('./terraform') {
