@@ -15,9 +15,15 @@ pipeline {
         stage('Initialize Terraform') {
             steps {
                 dir('./terraform') {
-                    sh 'terraform init -backend-config=${AWS_BUCKET_TF_STATE}'
-                    sh 'terraform init -backend-config=${AZURE_BUCKET_TF_STATE}'
-                    sh 'terraform init -backend-config=${GCP_BUCKET_TF_STATE}'
+                     withCredentials([string(credentialsId: 'aws-bucket-tf-state', variable: 'AWS_BUCKET_TF_STATE')]) {
+                     withCredentials([string(credentialsId: 'azure-bucket-tf-state', variable: 'AZURE_BUCKET_TF_STATE')]) {
+                     withCredentials([string(credentialsId: 'gcp-tf-state', variable: 'GCP_BUCKET_TF_STATE')]) {
+                        sh 'terraform init -backend-config=${AWS_BUCKET_TF_STATE}'
+                        sh 'terraform init -backend-config=${AZURE_BUCKET_TF_STATE}'
+                        sh 'terraform init -backend-config=${GCP_BUCKET_TF_STATE}'
+                     }
+                     }
+                     }
                 }
             }
         }
