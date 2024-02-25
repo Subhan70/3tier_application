@@ -12,16 +12,6 @@ pipeline {
             }
         }
 
-        stage('Setup Terraform') {
-            steps {
-                script {
-                    sh 'curl -O https://releases.hashicorp.com/terraform/1.7.4/terraform_1.7.4_linux_amd64.zip'
-                    sh 'unzip terraform_1.7.4_linux_amd64.zip'
-                    sh 'sudo mv terraform /usr/local/bin/'
-                }
-            }
-        }
-
         stage('Initialize Terraform') {
             steps {
                 script {
