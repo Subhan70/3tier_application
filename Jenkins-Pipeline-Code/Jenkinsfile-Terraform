@@ -3,6 +3,7 @@ pipeline {
 
     tools {
         terraform "terraform"
+        gcloud "gcloud"
     }
 
     stages {
@@ -49,6 +50,14 @@ pipeline {
         //         }
         //     }
         // }
+
+        stage('Gcloud authorization') {
+            steps {
+                withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GCLOUD_KEYFILE')]) {
+                    sh 'gcloud auth activate-service-account --key-file=${GCLOUD_KEYFILE}'
+                }
+            }
+        }
 
         stage('Terraform Plan') {
             steps {
