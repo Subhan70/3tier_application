@@ -16,7 +16,9 @@ pipeline {
         stage('Gcloud version') {
             steps {
                 script {
-                    sh "gcloud version"
+                    withCredentials([googleServiceAccountCredentials(credentialsId: 'gcp-service-account-credential')]) {
+                        sh "gcloud version"
+                    }
                 }
             }
         }
