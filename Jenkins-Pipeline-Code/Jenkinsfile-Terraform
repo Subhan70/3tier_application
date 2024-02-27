@@ -6,10 +6,6 @@ pipeline {
         gcloud "gcloud"
     }
 
-    environment {
-        GCLOUD_SERVICE_ACCOUNT_CREDENTIALS = credentials('gcp-service-account-key')
-    }
-
     stages {
         stage('Checkout Source Code') {
             steps {
@@ -17,10 +13,21 @@ pipeline {
             }
         }
 
+        stage('Gcloud version') {
+            steps {
+                script {
+                    sh "gcloud version"
+                }
+            }
+        }
+
         stage('Gcloud authorization') {
             steps {
-                script{
-                    sh "gcloud auth activate-service-account --key-file=${GCLOUD_SERVICE_ACCOUNT_CREDENTIALS}"
+                withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GCLOUD_SERVICE_ACCOUNT_CREDENTIALS')]) {
+                    sh '''
+                    gcloud version
+                    gcloud auth activate-service-account --key-file="$GCLOUD_SERVICE_ACCOUNT_CREDENTIALS"
+                    '''
                 }
             }
         }
