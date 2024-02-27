@@ -17,24 +17,15 @@ pipeline {
             }
         }
 
-        stage('GCP Authentication') {
+        stage('Gcloud authorization') {
             steps {
-                // Reference the stored Google Service Account credentials securely
-                withCredentials([googleServiceAccountCredentials('gcp-service-account-credential')]) {
-                    sh 'gcloud auth activate-service-account --key-file=${GCLOUD_SERVICE_ACCOUNT_CREDENTIALS}'
+                script {
+                    withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GCLOUD_SERVICE_ACCOUNT_CREDENTIALS')]) {
+                        sh "gcloud auth activate-service-account --key-file=${GCLOUD_SERVICE_ACCOUNT_CREDENTIALS}"
+                    }
                 }
             }
         }
-
-        // stage('Gcloud authorization') {
-        //     steps {
-        //         script {
-        //             withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GCLOUD_SERVICE_ACCOUNT_CREDENTIALS')]) {
-        //                 sh 'gcloud auth activate-service-account --key-file=${GCLOUD_SERVICE_ACCOUNT_CREDENTIALS}'
-        //             }
-        //         }
-        //     }
-        // }
 
         stage('Initialize Terraform') {
             steps {
