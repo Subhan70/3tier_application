@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GCLOUD_SERVICE_ACCOUNT_CREDENTIALS')]) {
-                        sh 'gcloud auth activate-service-account --key-file=$GCLOUD_SERVICE_ACCOUNT_CREDENTIALS'
+                        sh 'gcloud auth activate-service-account --key-file=${GCLOUD_SERVICE_ACCOUNT_CREDENTIALS}'
                     }
                 }
             }
