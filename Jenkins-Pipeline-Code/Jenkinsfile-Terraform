@@ -6,10 +6,6 @@ pipeline {
         gcloud "gcloud"
     }
 
-    environment {
-        GCP_SECRET_CREDS=credentials('gcp-secret-creds')
-    }
-
     stages {
         stage('Checkout Source Code') {
             steps {
