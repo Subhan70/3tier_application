@@ -13,11 +13,19 @@ pipeline {
             }
         }
 
+        stage('Gcloud authorization') {
+            steps {
+                withCredentials([googleServiceAccountCredentials(credentialsId: 'gcp-service-account-key', jsonKeyFileVariable: 'GCLOUD_SERVICE_ACCOUNT_CREDENTIALS')]) {
+                    sh 'gcloud auth activate-service-account --key-file=$GCLOUD_SERVICE_ACCOUNT_CREDENTIALS'
+                }
+            }
+        }
+
         stage('Initialize Terraform') {
             steps {
                 dir('./terraform') {
                     withAWS(credentials: 'aws-access-key-id', region: 'us-east-1') {
-                        withCredentials([googleServiceAccountCredentials(credentialsId: 'gcp-service-account-key')]){
+                        withCredentials([googleServiceAccountCredentials('gcp-service-account-key')]){
                             sh 'terraform init'
                         }
                     }
@@ -29,7 +37,7 @@ pipeline {
             steps {
                 dir('./terraform') {
                     withAWS(credentials: 'aws-access-key-id', region: 'us-east-1') {
-                        withCredentials([googleServiceAccountCredentials(credentialsId: 'gcp-service-account-key')]){
+                        withCredentials([googleServiceAccountCredentials('gcp-service-account-key')]){
                             sh 'terraform fmt -check'
                         }
                     }
@@ -41,7 +49,7 @@ pipeline {
             steps {
                 dir('./terraform') {
                     withAWS(credentials: 'aws-access-key-id', region: 'us-east-1') {
-                        withCredentials([googleServiceAccountCredentials(credentialsId: 'gcp-service-account-key')]){
+                        withCredentials([googleServiceAccountCredentials('gcp-service-account-key')]){
                             sh 'terraform validate'
                         }
                     }
@@ -57,19 +65,11 @@ pipeline {
         //     }
         // }
 
-        stage('Gcloud authorization') {
-            steps {
-                withCredentials([googleServiceAccountCredentials(credentialsId: 'gcp-service-account-key', jsonKeyFileVariable: 'GCLOUD_SERVICE_ACCOUNT_CREDENTIALS')]) {
-                    sh 'gcloud auth activate-service-account --key-file=$GCLOUD_SERVICE_ACCOUNT_CREDENTIALS'
-                }
-            }
-        }
-
         stage('Terraform Plan') {
             steps {
                 dir('./terraform') {
                     withAWS(credentials: 'aws-access-key-id', region: 'us-east-1') {
-                        withCredentials([googleServiceAccountCredentials(credentialsId: 'gcp-service-account-key')]){
+                        withCredentials([googleServiceAccountCredentials('gcp-service-account-key')]){
                             sh 'terraform plan -no-color -input=false -out planfile'
                         }
                     }
