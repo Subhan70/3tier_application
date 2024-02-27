@@ -53,8 +53,8 @@ pipeline {
 
         stage('Gcloud authorization') {
             steps {
-                withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GCLOUD_KEYFILE')]) {
-                    sh 'gcloud auth activate-service-account --key-file=${GCLOUD_KEYFILE}'
+                withCredentials([googleServiceAccountCredentials(credentialsId: 'gcp-service-account-key', jsonKeyFileVariable: 'GCLOUD_SERVICE_ACCOUNT_CREDENTIALS')]) {
+                    sh 'gcloud auth activate-service-account --key-file=$GCLOUD_SERVICE_ACCOUNT_CREDENTIALS'
                 }
             }
         }
