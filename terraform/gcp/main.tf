@@ -4,6 +4,12 @@ provider "google" {
   credentials = var.gcp_service_account_key
 }
 
+provider "google-beta" {
+  project     = "three-tier-multicloud"
+  region      = "us-central1"
+  credentials = var.gcp_service_account_key
+}
+
 provider "kubernetes" {
   host                   = "https://${module.gke.endpoint}"
   token                  = data.google_client_config.default.access_token
