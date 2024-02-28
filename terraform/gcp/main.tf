@@ -1,12 +1,4 @@
-provider "google" {
-  project     = "three-tier-multicloud"
-  region      = "us-central1"
-}
 
-provider "google-beta" {
-  project     = "three-tier-multicloud"
-  region      = "us-central1"
-}
 
 provider "kubernetes" {
   host                   = "https://${module.gke.endpoint}"
