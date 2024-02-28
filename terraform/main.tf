@@ -7,5 +7,5 @@ module "azure" {
 }
 
 module "gcp" {
-  source                  = "./gcp"
+  source = "./gcp"
 }
