@@ -52,7 +52,7 @@ pipeline {
                 script {
                     dir('./terraform') {
                         withAWS(credentials: 'aws-access-key-id', region: 'us-east-1') {
-                            sh 'terraform validate'
+                            sh 'terraform validate -var=google_application_credentials=$(echo $GOOGLE_APPLICATION_CREDENTIALS)'
                         }
                     }
                 }
