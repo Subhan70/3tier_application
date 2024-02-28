@@ -8,5 +8,5 @@ module "azure" {
 
 module "gcp" {
   source = "./gcp"
-  env    = "dev"
+  gcp_service_account_key = var.gcp_service_account_key
 }
