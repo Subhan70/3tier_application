@@ -71,7 +71,7 @@ pipeline {
             steps {
                 dir('./terraform') {
                     withAWS(credentials: 'aws-access-key-id', region: 'us-east-1') {
-                        sh 'terraform plan -no-color -input=false -out planfile'
+                        sh 'terraform plan -var=google_application_credentials=$GOOGLE_APPLICATION_CREDENTIALS -no-color -input=false -out planfile'
                     }
                 }
             }
