@@ -28,8 +28,4 @@ variable "ip_range_services" {
   default     = "services-range"
 }
 
-variable "google_application_credentials" {
-  type        = string
-}
-
 ##
