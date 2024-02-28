@@ -5,11 +5,7 @@ pipeline {
         terraform "terraform"
         gcloud "gcloud"
     }
-
-    environment {
-        GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-service-account-key')
-    }
-
+    
     stages {
         stage('Checkout Source Code') {
             steps {
@@ -22,12 +18,6 @@ pipeline {
                 withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GCLOUD_SERVICE_ACCOUNT_CREDENTIALS')]) {
                     sh 'gcloud auth activate-service-account --key-file=${GCLOUD_SERVICE_ACCOUNT_CREDENTIALS}'
                 }
-            }
-        }
-
-        stage('Run Gcloud Credentials') {
-            steps {
-                sh 'gcloud auth application-default login -y'
             }
         }
 
