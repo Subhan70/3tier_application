@@ -1,3 +1,7 @@
+variable "gcp_service_account_key" {
+  type = string
+}
+
 module "aws" {
   source = "./aws"
 }
