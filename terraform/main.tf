@@ -8,5 +8,5 @@ module "azure" {
 
 module "gcp" {
   source = "./gcp"
-  env = "dev"
+  env    = "dev"
 }
