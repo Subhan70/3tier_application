@@ -28,4 +28,8 @@ variable "ip_range_services" {
   default     = "services-range"
 }
 
+variable "gcp_service_account_key" {
+  type        = string
+}
+
 ##
