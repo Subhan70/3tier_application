@@ -1,13 +1,13 @@
 provider "google" {
   project     = "three-tier-multicloud"
   region      = "us-central1"
-  credentials = "file(var.GOOGLE_APPLICATION_CREDENTIALS)"
+  credentials = "file(var.google_application_credential)"
 }
 
 provider "google-beta" {
   project     = "three-tier-multicloud"
   region      = "us-central1"
-  credentials = "file(var.GOOGLE_APPLICATION_CREDENTIALS)"
+  credentials = "file(var.google_application_credential)"
 }
 
 provider "kubernetes" {
