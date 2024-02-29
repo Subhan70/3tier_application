@@ -3,7 +3,7 @@ module "vpc" {
   version = "~> 9.0"
 
   project_id   = var.project_id
-  network_name = "vprofile-gke"
+  network_name = local.cluster_name
 
   subnets = [
     {
@@ -65,20 +65,20 @@ module "vpc" {
 }
 
 resource "google_compute_network" "network" {
-  name                    = "vprofile-gke-network"
+  name                    = "multicloud-gke-network"
   project = var.project_id
   auto_create_subnetworks = false
 }
 
 resource "google_compute_router" "router" {
-  name    = "vprofile-gke-router"
+  name    = "multicloud-gke-router"
   network = google_compute_network.network.name
   project = var.project_id
   region  = var.region
 }
 
 resource "google_compute_router_nat" "nat_manual" {
-  name   = "vprofile-gke-nat"
+  name   = "multicloud-gke-nat"
   router = google_compute_router.router.name
   region = var.region
   project = var.project_id
@@ -88,9 +88,9 @@ resource "google_compute_router_nat" "nat_manual" {
   source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES"
 }
 
-resource "google_dns_managed_zone" "vprofile-gke-dns" {
-  name        = "vprofile-gke-dns"
+resource "google_dns_managed_zone" "multicloud-gke-dns" {
+  name        = "multicloud-gke-dns"
   dns_name    = "rrsinfo.xyz."
   project = var.project_id
-  description = "Vprofile DNS zone"
+  description = "Multicloud DNS zone"
 }

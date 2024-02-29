@@ -7,7 +7,7 @@ variable "region" {
 variable "clusterName" {
   description = "Name of the AKS cluster"
   type        = string
-  default     = "vprofile-aks"
+  default     = "multicloud-aks"
 }
 
 variable "prefix" {
