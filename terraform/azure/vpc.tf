@@ -15,7 +15,7 @@ module "vnet" {
 }
 
 # Create subnet-1
- resource "azurerm_subnet" "az-subnets" {
+ resource "azurerm_subnet" "az-subnet1" {
   name                 = "three-tier-multicloud-subnet1"
   resource_group_name  = var.resourceGroup
   virtual_network_name = module.vnet.vnet_name
@@ -23,7 +23,7 @@ module "vnet" {
 }
 
 # Create subnet-2
- resource "azurerm_subnet" "az-subnets" {
+ resource "azurerm_subnet" "az-subnet2" {
   name                 = "three-tier-multicloud-subnet2"
   resource_group_name  = var.resourceGroup
   virtual_network_name = module.vnet.vnet_name
@@ -31,7 +31,7 @@ module "vnet" {
 }
 
 # Create subnet-3
- resource "azurerm_subnet" "az-subnets" {
+ resource "azurerm_subnet" "az-subnet3" {
   name                 = "three-tier-multicloud-subnet3"
   resource_group_name  = var.resourceGroup
   virtual_network_name = module.vnet.vnet_name
@@ -39,7 +39,7 @@ module "vnet" {
 }
 
 # Create subnet-4
- resource "azurerm_subnet" "az-subnets" {
+ resource "azurerm_subnet" "az-subnet4" {
   name                 = "three-tier-multicloud-subnet4"
   resource_group_name  = var.resourceGroup
   virtual_network_name = module.vnet.vnet_name
@@ -47,7 +47,7 @@ module "vnet" {
 }
 
 # Create subnet-5
- resource "azurerm_subnet" "az-subnets" {
+ resource "azurerm_subnet" "az-subnet5" {
   name                 = "three-tier-multicloud-subnet5"
   resource_group_name  = var.resourceGroup
   virtual_network_name = module.vnet.vnet_name
@@ -55,7 +55,7 @@ module "vnet" {
 }
 
 # Create subnet-6
- resource "azurerm_subnet" "az-subnets" {
+ resource "azurerm_subnet" "az-subnet6" {
   name                 = "three-tier-multicloud-subnet6"
   resource_group_name  = var.resourceGroup
   virtual_network_name = module.vnet.vnet_name
