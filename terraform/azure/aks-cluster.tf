@@ -3,7 +3,7 @@ module "aks" {
   version = "7.5.0"
 
   prefix              = var.prefix
-  resource_group_name = azurerm_resource_group.resource-grp.name
+  resource_group_name = var.resourceGroup
   os_disk_size_gb     = 60
   sku_tier            = "Standard"
   vnet_subnet_id      = azurerm_subnet.az-subnets.id

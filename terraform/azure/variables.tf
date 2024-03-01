@@ -1,3 +1,9 @@
+variable "resourceGroup" {
+  description = "Name of the Azure Resource group"
+  type        = string
+  default     = "Three-tier-multicloud"
+}
+
 variable "region" {
   description = "Azure region"
   type        = string
