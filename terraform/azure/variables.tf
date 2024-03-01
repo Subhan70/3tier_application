@@ -25,5 +25,5 @@ variable "prefix" {
 variable "use_for_each" {
   description = "Set for each to true for vnet"
   type        = string
-  default     = true
+  default     = false
 }
