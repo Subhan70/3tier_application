@@ -82,3 +82,4 @@ resource "azurerm_route_table" "route-table" {
     next_hop_type  = "VnetLocal"
   }
 }
+#
