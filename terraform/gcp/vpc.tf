@@ -100,7 +100,7 @@ resource "google_compute_router_nat" "nat_manual" {
 
 resource "google_dns_managed_zone" "multicloud-gke-dns" {
   name        = "multicloud-gke-dns"
-  dns_name    = "rrsinfo.xyz"
+  dns_name    = "rrsinfo.xyz."
   project = var.project_id
   description = "Multicloud DNS zone"
 }
