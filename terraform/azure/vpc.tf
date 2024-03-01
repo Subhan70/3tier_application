@@ -19,7 +19,7 @@ module "vnet" {
   name                 = "three-tier-multicloud-subnet"
   resource_group_name  = var.resourceGroup
   virtual_network_name = module.vnet.vnet_name
-  address_prefixes     = ["172.20.1.0/16", "172.20.2.0/16", "172.20.3.0/16", "172.20.4.0/16", "172.20.5.0/16", "172.20.6.0/16"]
+  address_prefixes     = ["172.20.0.1/24", "172.20.0.2/24", "172.20.0.3/24", "172.20.0.4/24", "172.20.0.5/24", "172.20.0.6/24"]
  }
 
 # Creates network security groups
