@@ -14,6 +14,14 @@ module "vnet" {
   }
 }
 
+# Create subnet ( Only one subnet can be created as AllowMultipleAddressPrefixesOnSubnet is not yet in public preview)
+ resource "azurerm_subnet" "az-subnet" {
+  name                 = "three-tier-multicloud-subnet"
+  resource_group_name  = var.resourceGroup
+  virtual_network_name = module.vnet.vnet_name
+  address_prefixes     = ["172.20.1.0/24"]
+}
+
 # Creates network security groups
 resource "azurerm_network_security_group" "nsg" {
   location            = var.region
