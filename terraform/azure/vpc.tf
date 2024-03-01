@@ -14,13 +14,53 @@ module "vnet" {
   }
 }
 
-# Create subnets
+# Create subnet-1
  resource "azurerm_subnet" "az-subnets" {
-  name                 = "three-tier-multicloud-subnet"
+  name                 = "three-tier-multicloud-subnet1"
   resource_group_name  = var.resourceGroup
   virtual_network_name = module.vnet.vnet_name
-  address_prefixes     = ["172.20.1.0/24", "172.20.2.0/24", "172.20.3.0/24", "172.20.4.0/24", "172.20.5.0/24", "172.20.6.0/24"]
- }
+  address_prefixes     = ["172.20.1.0/24"]
+}
+
+# Create subnet-2
+ resource "azurerm_subnet" "az-subnets" {
+  name                 = "three-tier-multicloud-subnet2"
+  resource_group_name  = var.resourceGroup
+  virtual_network_name = module.vnet.vnet_name
+  address_prefixes     = ["172.20.2.0/24"]
+}
+
+# Create subnet-3
+ resource "azurerm_subnet" "az-subnets" {
+  name                 = "three-tier-multicloud-subnet3"
+  resource_group_name  = var.resourceGroup
+  virtual_network_name = module.vnet.vnet_name
+  address_prefixes     = ["172.20.3.0/24"]
+}
+
+# Create subnet-4
+ resource "azurerm_subnet" "az-subnets" {
+  name                 = "three-tier-multicloud-subnet4"
+  resource_group_name  = var.resourceGroup
+  virtual_network_name = module.vnet.vnet_name
+  address_prefixes     = ["172.20.4.0/24"]
+}
+
+# Create subnet-5
+ resource "azurerm_subnet" "az-subnets" {
+  name                 = "three-tier-multicloud-subnet5"
+  resource_group_name  = var.resourceGroup
+  virtual_network_name = module.vnet.vnet_name
+  address_prefixes     = ["172.20.5.0/24"]
+}
+
+# Create subnet-6
+ resource "azurerm_subnet" "az-subnets" {
+  name                 = "three-tier-multicloud-subnet6"
+  resource_group_name  = var.resourceGroup
+  virtual_network_name = module.vnet.vnet_name
+  address_prefixes     = ["172.20.6.0/24"]
+}
 
 # Creates network security groups
 resource "azurerm_network_security_group" "nsg" {
