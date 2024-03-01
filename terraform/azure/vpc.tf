@@ -4,7 +4,6 @@ module "vnet" {
   version = "4.1.0"
   resource_group_name = var.resourceGroup
   vnet_name = "three-tier-multicloud-vnet"
-  use_for_each        = var.use_for_each
   address_space       = ["172.20.0.0/16"]
   vnet_location       = var.region
 
