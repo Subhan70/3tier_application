@@ -10,7 +10,7 @@ module "aks" {
   role_based_access_control_enabled = true
   node_pools          = {
     one = {
-      name                  = "node-1"
+      name                  = "node1"
       vm_size               = "Standard_D2s_v3"
       node_count            = 2
       vnet_subnet_id        = azurerm_subnet.az-subnet.id
@@ -19,7 +19,7 @@ module "aks" {
       zones                 = ["1"]
     }
     two = {
-      name                  = "node-2"
+      name                  = "node2"
       vm_size               = "Standard_D2s_v3"
       node_count            = 1
       vnet_subnet_id        = azurerm_subnet.az-subnet.id

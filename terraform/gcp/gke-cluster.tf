@@ -16,7 +16,7 @@ module "gke" {
 
   node_pools = [
     {
-      name               = "node-pool1"
+      name               = "node-pool-1"
       machine_type       = "n1-standard-4" # GKE does not have direct equivalents to AWS instance types, using n1-standard-1 as an example
       initial_node_count = 2
       min_count          = 1
@@ -26,7 +26,7 @@ module "gke" {
       node_locations     = var.zone
     },
     {
-      name               = "node-pool2"
+      name               = "node-pool-2"
       machine_type       = "n1-standard-4"
       initial_node_count = 1
       min_count          = 1
