@@ -29,10 +29,16 @@ resource "azurerm_network_security_group" "nsg" {
   resource_group_name = var.resourceGroup
 }
 
-# Associates network security group with private subnets
+# Associates network security group with subnet
 resource "azurerm_subnet_network_security_group_association" "snsg" {
   subnet_id                 = azurerm_subnet.az-subnet.id
   network_security_group_id = azurerm_network_security_group.nsg.id
+}
+
+# Associates route table with subnet
+resource "azurerm_subnet_route_table_association" "srt" {
+  subnet_id      = azurerm_subnet.az-subnet.id
+  route_table_id = azurerm_route_table.route-table.id
 }
 
 # Creates Public ip
