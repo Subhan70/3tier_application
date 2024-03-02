@@ -37,7 +37,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "three-tier-multicloud"
+    bucket = "multicloud-threetier"
     key    = "terraform.tfstate"
     region = "us-east-1" # This is the AWS default, but can be set to any valid AWS region.
   }
