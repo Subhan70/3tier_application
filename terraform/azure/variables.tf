@@ -1,7 +1,7 @@
 variable "resourceGroup" {
   description = "Name of the Azure Resource group"
   type        = string
-  default     = "Three-tier-multicloud"
+  default     = "MultiCloudThreeTier"
 }
 
 variable "region" {
@@ -19,7 +19,7 @@ variable "clusterName" {
 variable "prefix" {
   description = "Prefix for naming resources"
   type        = string
-  default     = "three-tier-multicloud"
+  default     = "multi-cloud-threetier"
 }
 
 variable "use_for_each" {
