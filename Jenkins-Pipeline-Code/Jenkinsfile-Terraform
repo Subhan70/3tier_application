@@ -69,6 +69,18 @@ pipeline {
             }
         }
 
+        stage('Remove states') {
+            steps {
+                dir('./terraform') {
+                    withAWS(credentials: 'aws-access-key-id', region: 'us-east-1') {
+                        sh '''terraform state rm module.azure.module.vnet.azurerm_subnet.subnet_count[0]
+                        terraform state rm module.azure.module.vnet.azurerm_subnet.subnet_count[1]
+                        terraform state rm module.azure.module.vnet.azurerm_subnet.subnet_count[2]'''
+                    }
+                }
+            }
+        }
+
         stage('Terraform Plan') {
             steps {
                 dir('./terraform') {
@@ -79,14 +91,14 @@ pipeline {
             }
         }
 
-        stage('Terraform Apply') {
-            steps {
-                dir('./terraform') {
-                    withAWS(credentials: 'aws-access-key-id', region: 'us-east-1') {
-                        sh 'terraform apply -auto-approve -input=false -parallelism=1 planfile'
-                    }
-                }
-            }
-        }
+        // stage('Terraform Apply') {
+        //     steps {
+        //         dir('./terraform') {
+        //             withAWS(credentials: 'aws-access-key-id', region: 'us-east-1') {
+        //                 sh 'terraform apply -auto-approve -input=false -parallelism=1 planfile'
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
