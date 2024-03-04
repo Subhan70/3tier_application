@@ -6,6 +6,7 @@ module "vnet" {
   vnet_name = "three-tier-multicloud-vnet"
   use_for_each        = var.use_for_each
   address_space       = ["172.0.0.0/16"]
+  subnet_names        = ["subnet1", "subnet2", "subnet3", "subnet4", "subnet5", "subnet6"]
   subnet_prefixes     = ["172.0.1.0/24", "172.0.2.0/24", "172.0.3.0/24", "172.0.4.0/24", "172.0.5.0/24", "172.0.6.0/24"]
   vnet_location       = var.region
 
