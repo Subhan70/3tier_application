@@ -7,7 +7,8 @@ resource "azurerm_network_security_group" "nsg" {
 
 # Associates network security group with subnet
 resource "azurerm_subnet_network_security_group_association" "snsg" {
-  subnet_id                 = azurerm_subnet.az-subnet.id
+  for_each                  = module.vnet.subnet_prefixes
+  subnet_id                 = each.value.id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
@@ -26,7 +27,8 @@ resource "azurerm_route_table" "route-table" {
 
 # Associates route table with subnet
 resource "azurerm_subnet_route_table_association" "srt" {
-  subnet_id                 = azurerm_subnet.az-subnet.id
+  for_each                  = module.vnet.subnet_prefixes
+  subnet_id                 = each.value.id
   route_table_id = azurerm_route_table.route-table.id
 }
 
@@ -77,9 +79,9 @@ module "vnet" {
 }
 
 # Create subnet ( Only one subnet can be created as AllowMultipleAddressPrefixesOnSubnet is not yet in public preview)
- resource "azurerm_subnet" "az-subnet" {
-  name                 = "three-tier-multicloud-subnet"
-  resource_group_name  = var.resourceGroup
-  virtual_network_name = module.vnet.vnet_name
-  address_prefixes     = ["172.0.1.0/24", "172.0.2.0/24", "172.0.3.0/24"]
-}
+# resource "azurerm_subnet" "az-subnet" {
+# name                 = "three-tier-multicloud-subnet"
+#  resource_group_name  = var.resourceGroup
+#  virtual_network_name = module.vnet.vnet_name
+#  address_prefixes     = ["172.0.1.0/24", "172.0.2.0/24", "172.0.3.0/24"]
+#}
