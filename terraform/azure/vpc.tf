@@ -5,6 +5,12 @@ resource "azurerm_network_security_group" "nsg" {
   resource_group_name = var.resourceGroup
 }
 
+# Associates network security group with subnet
+resource "azurerm_subnet_network_security_group_association" "snsg" {
+  subnet_id                 = data.azurerm_subnet.subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg.id
+}
+
 # Creates route table
 resource "azurerm_route_table" "route-table" {
   location            = var.region
@@ -16,6 +22,12 @@ resource "azurerm_route_table" "route-table" {
     address_prefix = "0.0.0.0/0"
     next_hop_type  = "VnetLocal"
   }
+}
+
+# Associates route table with subnet
+resource "azurerm_subnet_route_table_association" "srt" {
+  subnet_id      = data.azurerm_subnet.subnet.id
+  route_table_id = azurerm_route_table.route-table.id
 }
 
 # Creates Public ip
@@ -55,27 +67,9 @@ module "vnet" {
   vnet_name = "three-tier-multicloud-vnet"
   use_for_each        = var.use_for_each
   address_space       = ["172.0.0.0/16"]
-  subnet_names        = ["subnet1", "subnet2", "subnet3", "subnet4", "subnet5", "subnet6"]
+  subnet_names        = ["public-subnet-1", "public-subnet-2", "public-subnet-3", "private-subnet-1", "private-subnet-2", "private-subnet-3"]
   subnet_prefixes     = ["172.0.1.0/24", "172.0.2.0/24", "172.0.3.0/24", "172.0.4.0/24", "172.0.5.0/24", "172.0.6.0/24"]
   vnet_location       = var.region
-
-  nsg_ids = {
-  subnet1 = azurerm_network_security_group.nsg.id
-  subnet2 = azurerm_network_security_group.nsg.id
-  subnet3 = azurerm_network_security_group.nsg.id
-  subnet4 = azurerm_network_security_group.nsg.id
-  subnet5 = azurerm_network_security_group.nsg.id
-  subnet6 = azurerm_network_security_group.nsg.id
- }
-
- route_tables_ids = {
-  subnet1 = azurerm_route_table.route-table.id
-  subnet2 = azurerm_route_table.route-table.id
-  subnet3 = azurerm_route_table.route-table.id
-  subnet4 = azurerm_route_table.route-table.id
-  subnet5 = azurerm_route_table.route-table.id
-  subnet6 = azurerm_route_table.route-table.id
- }
 
   tags = {
     Name = "Three tier multicloud"
