@@ -60,11 +60,11 @@ module "vnet" {
   vnet_location       = var.region
 
   nsg_ids = {
-    for subnet in module.vnet.subnet : subnet.name => azurerm_network_security_group.nsg.id
+    for subnet in module.vnet.subnet_names : subnet.name => azurerm_network_security_group.nsg.id
   }
 
   route_tables_ids = {
-    for subnet in module.vnet.subnet : subnet.name => azurerm_route_table.route-table.id
+    for subnet in module.vnet.subnet_names : subnet.name => azurerm_route_table.route-table.id
   }
 
   tags = {
