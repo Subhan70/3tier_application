@@ -60,21 +60,21 @@ module "vnet" {
   vnet_location       = var.region
 
   nsg_ids = {
-  subnet1 = azurerm_network_security_group.nsg.id
-  subnet2 = azurerm_network_security_group.nsg.id
-  subnet3 = azurerm_network_security_group.nsg.id
-  subnet4 = azurerm_network_security_group.nsg.id
-  subnet5 = azurerm_network_security_group.nsg.id
-  subnet6 = azurerm_network_security_group.nsg.id
+  public-subnet-1 = azurerm_network_security_group.nsg.id
+  public-subnet-2 = azurerm_network_security_group.nsg.id
+  public-subnet-3 = azurerm_network_security_group.nsg.id
+  private-subnet-1 = azurerm_network_security_group.nsg.id
+  private-subnet-2 = azurerm_network_security_group.nsg.id
+  private-subnet-3 = azurerm_network_security_group.nsg.id
  }
 
  route_tables_ids = {
-  subnet1 = azurerm_route_table.route-table.id
-  subnet2 = azurerm_route_table.route-table.id
-  subnet3 = azurerm_route_table.route-table.id
-  subnet4 = azurerm_route_table.route-table.id
-  subnet5 = azurerm_route_table.route-table.id
-  subnet6 = azurerm_route_table.route-table.id
+  public-subnet-1 = azurerm_route_table.route-table.id
+  public-subnet-2 = azurerm_route_table.route-table.id
+  public-subnet-3 = azurerm_route_table.route-table.id
+  private-subnet-1 = azurerm_route_table.route-table.id
+  private-subnet-2 = azurerm_route_table.route-table.id
+  private-subnet-3 = azurerm_route_table.route-table.id
  }
 
   tags = {
