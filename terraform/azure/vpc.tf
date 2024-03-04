@@ -1,3 +1,24 @@
+# Creates vnet
+resource "azurerm_virtual_network" "example" {
+  name                = "three-tier-multicloud-vnet"
+  location            = var.region
+  resource_group_name = var.resourceGroup
+  address_space       = ["172.0.0.0/16"]
+
+  tags = {
+    Name = "Three tier multicloud"
+    Technology  = "Terraform"
+  }
+}
+
+# Create subnet ( Only one subnet can be created as AllowMultipleAddressPrefixesOnSubnet is not yet in public preview)
+resource "azurerm_subnet" "az-subnet" {
+  name                 = "three-tier-multicloud-subnet"
+  resource_group_name  = var.resourceGroup
+  virtual_network_name = module.vnet.vnet_name
+  address_prefixes     = ["172.0.1.0/24"]
+}
+
 # Creates network security groups
 resource "azurerm_network_security_group" "nsg" {
   location            = var.region
@@ -7,8 +28,7 @@ resource "azurerm_network_security_group" "nsg" {
 
 # Associates network security group with subnet
 resource "azurerm_subnet_network_security_group_association" "snsg" {
-  for_each                  = set(var.subnet_prefixes)
-  subnet_id                 = each.value.id
+  subnet_id                 = azurerm_subnet.az-subnet.id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
@@ -27,8 +47,7 @@ resource "azurerm_route_table" "route-table" {
 
 # Associates route table with subnet
 resource "azurerm_subnet_route_table_association" "srt" {
-  for_each                  = set(var.subnet_prefixes)
-  subnet_id                 = each.value.id
+  subnet_id                 = azurerm_subnet.az-subnet.id
   route_table_id = azurerm_route_table.route-table.id
 }
 
@@ -62,26 +81,18 @@ resource "azurerm_dns_zone" "dns-zone" {
 }
 
 # Creates VPC
-module "vnet" {
-  source  = "Azure/vnet/azurerm"
-  version = "4.1.0"
-  resource_group_name = var.resourceGroup
-  vnet_name = "three-tier-multicloud-vnet"
-  use_for_each        = var.use_for_each
-  address_space       = ["172.0.0.0/16"]
-  subnet_prefixes     = ["172.0.1.0/24", "172.0.2.0/24", "172.0.3.0/24"]
-  vnet_location       = var.region
-
-  tags = {
-    Name = "Three tier multicloud"
-    Technology  = "Terraform"
-  }
-}
-
-# Create subnet ( Only one subnet can be created as AllowMultipleAddressPrefixesOnSubnet is not yet in public preview)
-# resource "azurerm_subnet" "az-subnet" {
-# name                 = "three-tier-multicloud-subnet"
-#  resource_group_name  = var.resourceGroup
-#  virtual_network_name = module.vnet.vnet_name
-#  address_prefixes     = ["172.0.1.0/24", "172.0.2.0/24", "172.0.3.0/24"]
+#module "vnet" {
+#  source  = "Azure/vnet/azurerm"
+#  version = "4.1.0"
+#  resource_group_name = var.resourceGroup
+#  vnet_name = "three-tier-multicloud-vnet"
+#  use_for_each        = var.use_for_each
+#  address_space       = ["172.0.0.0/16"]
+#  subnet_prefixes     = ["172.0.1.0/24", "172.0.2.0/24", "172.0.3.0/24"]
+#  vnet_location       = var.region
+#
+#  tags = {
+#    Name = "Three tier multicloud"
+#    Technology  = "Terraform"
+#  }
 #}
