@@ -60,12 +60,22 @@ module "vnet" {
   vnet_location       = var.region
 
   nsg_ids = {
-    for subnet in module.vnet.subnet_names : subnet.name => azurerm_network_security_group.nsg.id
-  }
+  subnet1 = azurerm_network_security_group.nsg.id
+  subnet2 = azurerm_network_security_group.nsg.id
+  subnet3 = azurerm_network_security_group.nsg.id
+  subnet4 = azurerm_network_security_group.nsg.id
+  subnet5 = azurerm_network_security_group.nsg.id
+  subnet6 = azurerm_network_security_group.nsg.id
+ }
 
-  route_tables_ids = {
-    for subnet in module.vnet.subnet_names : subnet.name => azurerm_route_table.route-table.id
-  }
+ route_tables_ids = {
+  subnet1 = azurerm_route_table.route-table.id
+  subnet2 = azurerm_route_table.route-table.id
+  subnet3 = azurerm_route_table.route-table.id
+  subnet4 = azurerm_route_table.route-table.id
+  subnet5 = azurerm_route_table.route-table.id
+  subnet6 = azurerm_route_table.route-table.id
+ }
 
   tags = {
     Name = "Three tier multicloud"
