@@ -7,7 +7,8 @@ resource "azurerm_network_security_group" "nsg" {
 
 # Associates network security group with subnet
 resource "azurerm_subnet_network_security_group_association" "snsg" {
-  subnet_id                 = data.azurerm_subnet.subnet.id
+  for_each                  = data.azurerm_subnet.subnet
+  subnet_id                 = each.value.id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
@@ -26,7 +27,8 @@ resource "azurerm_route_table" "route-table" {
 
 # Associates route table with subnet
 resource "azurerm_subnet_route_table_association" "srt" {
-  subnet_id      = data.azurerm_subnet.subnet.id
+  for_each                  = data.azurerm_subnet.subnet
+  subnet_id                 = each.value.id
   route_table_id = azurerm_route_table.route-table.id
 }
 
