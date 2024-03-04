@@ -73,7 +73,7 @@ resource "azurerm_dns_zone" "dns-zone" {
 # Creates route table
 resource "azurerm_route_table" "route-table" {
   location            = var.region
-  name                = "MyRouteTable"
+  name                = "three-tier-multicloud-rtable"
   resource_group_name = var.resourceGroup
 
   route {
