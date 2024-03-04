@@ -85,10 +85,12 @@ resource "azurerm_route_table" "route-table" {
 
 # Resources to be ignored
 resource "azurerm_subnet" "subnet_count" {
-  count = var.ignore_subnets ? 1 : 0 
-  name                 = "subnet"
+  count = var.ignore_subnets ? 3 : 0
+  name               = "subnet${count.index + 1}"
   resource_group_name  = var.resourceGroup
   virtual_network_name = module.vnet.vnet_name
-  address_prefixes     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  address_prefixes   = [
+    "10.0.${count.index + 1}.0/24",
+  ]
 }
 #
