@@ -28,4 +28,9 @@ module "aks" {
       zones                 = ["1"]
     }
   }
+
+  tags = {
+    Name = "Three tier multicloud"
+    Technology  = "Terraform"
+  }
 }
