@@ -55,26 +55,26 @@ module "vnet" {
   vnet_name = "three-tier-multicloud-vnet"
   use_for_each        = var.use_for_each
   address_space       = ["172.0.0.0/16"]
-  subnet_names        = ["public-subnet-1", "public-subnet-2", "public-subnet-3", "private-subnet-1", "private-subnet-2", "private-subnet-3"]
+  subnet_names        = ["subnet1", "subnet2", "subnet3", "subnet4", "subnet5", "subnet6"]
   subnet_prefixes     = ["172.0.1.0/24", "172.0.2.0/24", "172.0.3.0/24", "172.0.4.0/24", "172.0.5.0/24", "172.0.6.0/24"]
   vnet_location       = var.region
 
   nsg_ids = {
-  public-subnet-1 = azurerm_network_security_group.nsg.id
-  public-subnet-2 = azurerm_network_security_group.nsg.id
-  public-subnet-3 = azurerm_network_security_group.nsg.id
-  private-subnet-1 = azurerm_network_security_group.nsg.id
-  private-subnet-2 = azurerm_network_security_group.nsg.id
-  private-subnet-3 = azurerm_network_security_group.nsg.id
+  subnet1 = azurerm_network_security_group.nsg.id
+  subnet2 = azurerm_network_security_group.nsg.id
+  subnet3 = azurerm_network_security_group.nsg.id
+  subnet4 = azurerm_network_security_group.nsg.id
+  subnet5 = azurerm_network_security_group.nsg.id
+  subnet6 = azurerm_network_security_group.nsg.id
  }
 
  route_tables_ids = {
-  public-subnet-1 = azurerm_route_table.route-table.id
-  public-subnet-2 = azurerm_route_table.route-table.id
-  public-subnet-3 = azurerm_route_table.route-table.id
-  private-subnet-1 = azurerm_route_table.route-table.id
-  private-subnet-2 = azurerm_route_table.route-table.id
-  private-subnet-3 = azurerm_route_table.route-table.id
+  subnet1 = azurerm_route_table.route-table.id
+  subnet2 = azurerm_route_table.route-table.id
+  subnet3 = azurerm_route_table.route-table.id
+  subnet4 = azurerm_route_table.route-table.id
+  subnet5 = azurerm_route_table.route-table.id
+  subnet6 = azurerm_route_table.route-table.id
  }
 
   tags = {
