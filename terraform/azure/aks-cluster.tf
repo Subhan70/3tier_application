@@ -6,7 +6,7 @@ module "aks" {
   resource_group_name = var.resourceGroup
   os_disk_size_gb     = 60
   sku_tier            = "Standard"
-  for_each            = var.subnet_prefixes
+  for_each            = set(var.subnet_prefixes)
   vnet_subnet_id      = each.value.id
   rbac_aad            = false
   node_pools          = {
@@ -14,7 +14,7 @@ module "aks" {
       name                  = "node1"
       vm_size               = "Standard_D2s_v3"
       node_count            = 2
-      for_each              = var.subnet_prefixes
+      for_each              = set(var.subnet_prefixes)
       vnet_subnet_id        = each.value.id
       max_count = 3
       min_count             = 1
@@ -24,7 +24,7 @@ module "aks" {
       name                  = "node2"
       vm_size               = "Standard_D2s_v3"
       node_count            = 1
-      for_each              = var.subnet_prefixes
+      for_each              = set(var.subnet_prefixes)
       vnet_subnet_id        = each.value.id
       max_count = 2
       min_count             = 1

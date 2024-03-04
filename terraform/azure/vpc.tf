@@ -7,7 +7,7 @@ resource "azurerm_network_security_group" "nsg" {
 
 # Associates network security group with subnet
 resource "azurerm_subnet_network_security_group_association" "snsg" {
-  for_each                  = var.subnet_prefixes
+  for_each                  = set(var.subnet_prefixes)
   subnet_id                 = each.value.id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
@@ -27,7 +27,7 @@ resource "azurerm_route_table" "route-table" {
 
 # Associates route table with subnet
 resource "azurerm_subnet_route_table_association" "srt" {
-  for_each                  = var.subnet_prefixes
+  for_each                  = set(var.subnet_prefixes)
   subnet_id                 = each.value.id
   route_table_id = azurerm_route_table.route-table.id
 }
