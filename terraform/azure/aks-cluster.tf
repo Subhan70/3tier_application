@@ -7,6 +7,7 @@ module "aks" {
   os_disk_size_gb     = 60
   sku_tier            = "Standard"
   vnet_subnet_id      = azurerm_subnet.az-subnet.id
+  rbac_aad            = false
   node_pools          = {
     one = {
       name                  = "node1"
