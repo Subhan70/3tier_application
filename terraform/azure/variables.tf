@@ -21,3 +21,8 @@ variable "prefix" {
   type        = string
   default     = "multicloud-threetier"
 }
+
+# Transform subnet set into a map with subnet names as keys
+locals {
+  subnet_map = {for s in azurerm_virtual_network.vnet.subnet : s.name => s}
+}

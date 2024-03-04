@@ -59,7 +59,7 @@ resource "azurerm_route_table" "route-table" {
 
 # Associates route table with subnet
 resource "azurerm_subnet_route_table_association" "srt" {
-  for_each                  = azurerm_virtual_network.vnet.subnet
+  for_each                  = local.subnet_map
   subnet_id                 = each.value.id
   route_table_id = azurerm_route_table.route-table.id
 }
