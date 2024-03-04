@@ -19,7 +19,7 @@ variable "clusterName" {
 variable "prefix" {
   description = "Prefix for naming resources"
   type        = string
-  default     = "multi-cloud-threetier"
+  default     = "multicloud-threetier"
 }
 
 variable "use_for_each" {
@@ -28,7 +28,9 @@ variable "use_for_each" {
   default     = false
 }
 
-variable "ignore_subnets" {
-  type = bool
-  default = true
+# Get the subnet ID using the data source
+data "azurerm_subnet" "subnet" {
+  name                  = "multicloud-threetier-subnets"
+  virtual_network_name  = module.vnet.vnet_name
+  resource_group_name  = var.resourceGroup
 }

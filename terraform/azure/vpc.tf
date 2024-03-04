@@ -32,15 +32,13 @@ resource "azurerm_network_security_group" "nsg" {
 
 # Associates network security group with subnet
 resource "azurerm_subnet_network_security_group_association" "snsg" {
-  for_each                  = module.vnet.subnet_ids
-  subnet_id                 = each.value
+  subnet_id                 = data.azurerm_subnet.subnet.id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
 # Associates route table with subnet
 resource "azurerm_subnet_route_table_association" "srt" {
-  for_each                  = module.vnet.subnet_ids
-  subnet_id                 = each.value
+  subnet_id                 = data.azurerm_subnet.subnet.id
   route_table_id = azurerm_route_table.route-table.id
 }
 
