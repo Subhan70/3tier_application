@@ -77,7 +77,6 @@ pipeline {
                         terraform plan -destroy -target=module.azure.module.vnet.azurerm_subnet.subnet_count[0] -out planfile
                         terraform plan -destroy -target=module.azure.module.vnet.azurerm_subnet.subnet_count[1] -out planfile
                         terraform plan -destroy -target=module.azure.module.vnet.azurerm_subnet.subnet_count[2] -out planfile
-                        terraform plan -no-color -input=false -out planfile
                         '''
                     }
                 }
