@@ -30,7 +30,8 @@ variable "use_for_each" {
 
 # Get the subnet ID using the data source
 data "azurerm_subnet" "subnet" {
-  name                  = ["public-subnet-1", "public-subnet-2", "public-subnet-3", "private-subnet-1", "private-subnet-2", "private-subnet-3"]
+  for_each              = toset(module.vnet.subnet_names)
+  name                  = each.value
   virtual_network_name  = module.vnet.vnet_name
   resource_group_name  = var.resourceGroup
 }
