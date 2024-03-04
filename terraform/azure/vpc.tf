@@ -1,5 +1,5 @@
 # Creates vnet
-resource "azurerm_virtual_network" "example" {
+resource "azurerm_virtual_network" "vnet" {
   name                = "three-tier-multicloud-vnet"
   location            = var.region
   resource_group_name = var.resourceGroup
@@ -15,7 +15,7 @@ resource "azurerm_virtual_network" "example" {
 resource "azurerm_subnet" "az-subnet" {
   name                 = "three-tier-multicloud-subnet"
   resource_group_name  = var.resourceGroup
-  virtual_network_name = module.vnet.vnet_name
+  virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["172.0.1.0/24"]
 }
 
