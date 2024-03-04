@@ -7,7 +7,7 @@ module "aks" {
   os_disk_size_gb     = 60
   sku_tier            = "Standard"
   vnet_subnet_id      = azurerm_subnet.az-subnet.id
-  role_based_access_control_enabled = true
+  role_based_access_control_enabled = false
   node_pools          = {
     one = {
       name                  = "node1"
