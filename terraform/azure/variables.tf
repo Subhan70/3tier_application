@@ -27,3 +27,8 @@ variable "use_for_each" {
   type        = string
   default     = false
 }
+
+variable "ignore_subnets" {
+  type = bool
+  default = true
+}

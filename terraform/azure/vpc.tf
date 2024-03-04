@@ -82,4 +82,27 @@ resource "azurerm_route_table" "route-table" {
     next_hop_type  = "VnetLocal"
   }
 }
+
+# Resources to be ignored
+resource "azurerm_subnet" "subnet1" {
+  name                 = "subnet1"
+  resource_group_name  = var.resourceGroup
+  virtual_network_name = module.vnet.vnet_name
+  address_prefixes     = ["10.0.1.0/24"]
+  count = var.ignore_subnets ? 0 : 1
+}
+resource "azurerm_subnet" "subnet2" {
+  name                 = "subnet2"
+  resource_group_name  = var.resourceGroup
+  virtual_network_name = module.vnet.vnet_name
+  address_prefixes     = ["10.0.2.0/24"]
+  count = var.ignore_subnets ? 0 : 1
+}
+resource "azurerm_subnet" "subnet3" {
+  name                 = "subnet3"
+  resource_group_name  = var.resourceGroup
+  virtual_network_name = module.vnet.vnet_name
+  address_prefixes     = ["10.0.3.0/24"]
+  count = var.ignore_subnets ? 0 : 1
+}
 #
