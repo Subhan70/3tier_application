@@ -27,3 +27,8 @@ variable "use_for_each" {
   type        = string
   default     = false
 }
+
+variable "subnet_prefixes" {
+  type    = list(string)
+  default = ["172.0.1.0/24", "172.0.2.0/24", "172.0.3.0/24"]
+}

@@ -12,3 +12,7 @@ output "region" {
   description = "Micrososft Azure AKS Cluster region"
   value       = var.region
 }
+
+output "subnet_prefixes" {
+  value = var.subnet_prefixes
+}
