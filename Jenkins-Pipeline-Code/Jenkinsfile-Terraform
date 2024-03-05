@@ -25,7 +25,7 @@ pipeline {
                     sh 'sudo apt install curl unzip -y'
                     sh 'curl -sL https://awscli.amazonaws.com/awscliv2-linux-x86_64.zip -o aws-cli-v2.zip'
                     sh 'unzip aws-cli-v2.zip'
-                    sh './aws/install'
+                    sh 'sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update'
                 }
             }
         }
