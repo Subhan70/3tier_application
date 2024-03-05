@@ -51,7 +51,27 @@ module "vpc" {
   ]
 
   secondary_ranges = {
-    public-subnet-2 = [
+    private-subnet-1 = [
+      {
+        range_name    = "pods-range"
+        ip_cidr_range = "192.168.0.0/20"
+      },
+      {
+        range_name    = "services-range"
+        ip_cidr_range = "10.0.0.0/20"
+      }
+    ],
+    private-subnet-2 = [
+      {
+        range_name    = "pods-range"
+        ip_cidr_range = "192.168.0.0/20"
+      },
+      {
+        range_name    = "services-range"
+        ip_cidr_range = "10.0.0.0/20"
+      }
+    ],
+    private-subnet-3 = [
       {
         range_name    = "pods-range"
         ip_cidr_range = "192.168.0.0/20"
