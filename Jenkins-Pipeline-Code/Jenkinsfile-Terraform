@@ -114,7 +114,10 @@ pipeline {
             steps {
                 dir('./terraform') {
                     withAWS(credentials: 'aws-access-key-id', region: 'us-east-1') {
-                        sh 'gcloud container clusters get-credentials multicloud-gke --zone asia-east1-a --project three-tier-multicloud' // Update placeholders as per your needs
+                        sh '''
+                        gcloud components install kubectl
+                        gcloud container clusters get-credentials multicloud-gke --zone asia-east1 --project three-tier-multicloud'
+                        ''' // Update placeholders as per your needs
                     }
                 }
             }
