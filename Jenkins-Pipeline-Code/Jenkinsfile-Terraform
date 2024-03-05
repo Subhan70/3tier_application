@@ -95,6 +95,14 @@ pipeline {
             }
         }
 
+        stage('Set environment variable') {
+            steps {
+                script {
+                    sh 'export USE_GKE_GCLOUD_AUTH_PLUGIN=True'
+                }
+            }
+        }
+
         stage('Update kubeconfig for AWS EKS') {
             steps {
                 dir('./terraform') {
