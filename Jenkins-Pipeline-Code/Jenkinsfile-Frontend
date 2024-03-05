@@ -8,7 +8,7 @@ pipeline {
 
     environment  {
         registry = 'rajatsa/frontmulticloud'
-        registryCredential = 'docker'
+        registryCredential = 'dockerhub'
     }
 
     stages {

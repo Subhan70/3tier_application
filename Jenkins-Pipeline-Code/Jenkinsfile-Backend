@@ -8,7 +8,7 @@ pipeline {
 
     environment  {
         registry = 'rajatsa/backmulticloud'
-        registryCredential = 'docker'
+        registryCredential = 'dockerhub'
     }
 
     stages {
@@ -21,12 +21,6 @@ pipeline {
         stage('Checkout Source Code') {
             steps {
                 checkout scm
-            }
-        }
-
-        stage('Check Docker version') {
-            steps {
-                sh 'docker version'
             }
         }
 
