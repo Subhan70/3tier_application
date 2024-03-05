@@ -111,7 +111,7 @@ pipeline {
           }
         }
 
-        stage('Kubernetes Deploy') {
+        stage('Kubernetes Deploy on AWS') {
             agent { label 'AWS-KOPS' }
                 steps {
                     sh "helm upgrade --install --force multicloud-stack helm/multicloudcharts --set appimage=${registry}:V${BUILD_NUMBER} --namespace prod"
@@ -125,7 +125,7 @@ pipeline {
         //         }
         // }
 
-        stage('Kubernetes Deploy') {
+        stage('Kubernetes Deploy on GCP') {
             agent { label 'GCP-KOPS' }
                 steps {
                     sh "helm upgrade --install --force multicloud-stack helm/multicloudcharts --set appimage=${registry}:V${BUILD_NUMBER} --namespace prod"
