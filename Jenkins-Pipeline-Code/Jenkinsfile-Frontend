@@ -118,12 +118,12 @@ pipeline {
                 }
         }
 
-        stage('Kubernetes Deploy') {
-            agent { label 'AZURE-KOPS' }
-                steps {
-                    sh "helm upgrade --install --force multicloud-stack helm/multicloudcharts --set appimage=${registry}:V${BUILD_NUMBER} --namespace prod"
-                }
-        }
+        // stage('Kubernetes Deploy') {
+        //     agent { label 'AZURE-KOPS' }
+        //         steps {
+        //             sh "helm upgrade --install --force multicloud-stack helm/multicloudcharts --set appimage=${registry}:V${BUILD_NUMBER} --namespace prod"
+        //         }
+        // }
 
         stage('Kubernetes Deploy') {
             agent { label 'GCP-KOPS' }
