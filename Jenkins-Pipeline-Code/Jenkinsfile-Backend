@@ -12,6 +12,12 @@ pipeline {
     }
 
     stages {
+        stage('Checking path') {
+            steps {
+                sh 'echo $PATH'
+            }
+        }
+
         stage('Cleaning Workspace') {
             steps {
                 cleanWs()
