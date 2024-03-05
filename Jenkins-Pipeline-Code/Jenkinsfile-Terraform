@@ -19,6 +19,16 @@ pipeline {
             }
         }
 
+        stage('Install AWS CLI') {
+            steps {
+                script {
+                    sh 'curl -sL https://awscli.amazonaws.com/awscliv2-linux-x86_64.zip -o aws-cli-v2.zip'
+                    sh 'unzip aws-cli-v2.zip'
+                    sh './aws/install'
+                }
+            }
+        }
+
         stage('Gcloud authorization') {
             steps {
                 withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GCLOUD_SERVICE_ACCOUNT_CREDENTIALS')]) {
