@@ -12,31 +12,27 @@ pipeline {
     }
 
     stages {
-        // stage('Cleaning Workspace') {
-        //     steps {
-        //         cleanWs()
-        //     }
-        // }
+        stage('Cleaning Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
 
         stage("Docker Image Build") {
             steps {
-                script {
-                    dir('Application-Code/frontend') {
-                        dockerImage = docker.build registry + ":V$BUILD_NUMBER"
-                    }
+                dir('Application-Code/frontend') {
+                    dockerImage = docker.build registry + ":V$BUILD_NUMBER"
                 }
             }
         }
 
         stage('Deploy Image') {
           steps{
-            script {
                 dir('Application-Code/frontend') {
                     docker.withRegistry( '', registryCredential ) {
                         dockerImage.push("$BUILD_NUMBER")
                         dockerImage.push('latest')
-                    }
-              }
+                }
             }
           }
         }
@@ -103,10 +99,8 @@ pipeline {
 
         stage('Remove Unused docker image') {
           steps{
-            script {
-                dir('Application-Code/frontend') {
-                    sh "docker rmi $registry:V$BUILD_NUMBER"
-                }
+            dir('Application-Code/frontend') {
+                sh "docker rmi $registry:V$BUILD_NUMBER"
             }
           }
         }
