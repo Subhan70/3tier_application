@@ -54,31 +54,31 @@ module "vpc" {
     private-subnet-1 = [
       {
         range_name    = "pods-range"
-        ip_cidr_range = "192.168.0.0/20"
+        ip_cidr_range = "192.168.16.0/20"
       },
       {
         range_name    = "services-range"
-        ip_cidr_range = "10.0.0.0/20"
+        ip_cidr_range = "10.0.16.0/20"
       }
     ],
     private-subnet-2 = [
       {
         range_name    = "pods-range"
-        ip_cidr_range = "192.168.0.0/20"
+        ip_cidr_range = "192.168.32.0/20"
       },
       {
         range_name    = "services-range"
-        ip_cidr_range = "10.0.0.0/20"
+        ip_cidr_range = "10.0.32.0/20"
       }
     ],
     private-subnet-3 = [
       {
         range_name    = "pods-range"
-        ip_cidr_range = "192.168.0.0/20"
+        ip_cidr_range = "192.168.48.0/20"
       },
       {
         range_name    = "services-range"
-        ip_cidr_range = "10.0.0.0/20"
+        ip_cidr_range = "10.0.48.0/20"
       }
     ]
   }
