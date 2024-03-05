@@ -5,18 +5,6 @@ resource "azurerm_virtual_network" "vnet" {
   resource_group_name = var.resourceGroup
   address_space       = ["172.0.0.0/16"]
 
-  subnet {
-    name           = "subnet1"
-    address_prefix = "172.0.1.0/24"
-    security_group = azurerm_network_security_group.nsg.id
-  }
-
-  subnet {
-    name           = "subnet2"
-    address_prefix = "172.0.2.0/24"
-    security_group = azurerm_network_security_group.nsg.id
-  }
-
   tags = {
     Name = "Three tier multicloud"
     Technology  = "Terraform"
@@ -24,12 +12,12 @@ resource "azurerm_virtual_network" "vnet" {
 }
 
 # Create subnet ( Only one subnet can be created as AllowMultipleAddressPrefixesOnSubnet is not yet in public preview)
-#resource "azurerm_subnet" "az-subnet" {
-#  name                 = "three-tier-multicloud-subnet"
-#  resource_group_name  = var.resourceGroup
-#  virtual_network_name = azurerm_virtual_network.vnet.name
-#  address_prefixes     = ["172.0.1.0/24"]
-#}
+resource "azurerm_subnet" "az-subnet" {
+  name                 = "three-tier-multicloud-subnet"
+  resource_group_name  = var.resourceGroup
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["172.0.1.0/24"]
+}
 
 # Creates network security groups
 resource "azurerm_network_security_group" "nsg" {
@@ -39,10 +27,10 @@ resource "azurerm_network_security_group" "nsg" {
 }
 
 # Associates network security group with subnet
-#resource "azurerm_subnet_network_security_group_association" "snsg" {
-#  subnet_id                 = azurerm_subnet.az-subnet.id
-#  network_security_group_id = azurerm_network_security_group.nsg.id
-#}
+resource "azurerm_subnet_network_security_group_association" "snsg" {
+  subnet_id                 = azurerm_subnet.az-subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg.id
+}
 
 # Creates route table
 resource "azurerm_route_table" "route-table" {
@@ -59,8 +47,7 @@ resource "azurerm_route_table" "route-table" {
 
 # Associates route table with subnet
 resource "azurerm_subnet_route_table_association" "srt" {
-  for_each                  = local.subnet_map
-  subnet_id                 = each.value.id
+  subnet_id                 = azurerm_subnet.az-subnet.id
   route_table_id = azurerm_route_table.route-table.id
 }
 
