@@ -24,6 +24,12 @@ pipeline {
             }
         }
 
+        stage('Check Docker version') {
+            steps {
+                docker version
+            }
+        }
+
         stage("Docker Image Build") {
             steps {
                 script {
