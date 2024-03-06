@@ -18,12 +18,6 @@ pipeline {
             }
         }
 
-        stage('Kubectl check') {
-            steps {
-                sh 'kubectl version --client'
-            }
-        }
-
         stage('Checkout Source Code') {
             steps {
                 checkout scm
@@ -115,6 +109,12 @@ pipeline {
                 }
             }
           }
+        }
+
+        stage('Create namespace in AWS') {
+            withKubeConfig([credentialsId: 'aws-access-key-id', serverUrl: 'https://D508A0B02624B7C0BB37F1B09B94B608.gr7.us-east-1.eks.amazonaws.com']) {
+                sh 'kubectl create namespace prod'
+            }
         }
 
         stage('Kubernetes Deploy on AWS') {
