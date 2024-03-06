@@ -12,12 +12,6 @@ pipeline {
     }
 
     stages {
-        stage('Checking path') {
-            steps {
-                sh 'echo $PATH'
-            }
-        }
-
         stage('Cleaning Workspace') {
             steps {
                 cleanWs()
@@ -27,6 +21,16 @@ pipeline {
         stage('Checkout Source Code') {
             steps {
                 checkout scm
+            }
+        }
+
+        stage('Check java version') {
+            steps {
+                sh '''
+                    echo "JAVA_HOME: $JAVA_HOME"
+                    echo "PATH: $PATH"
+                    java -version
+                '''
             }
         }
 
