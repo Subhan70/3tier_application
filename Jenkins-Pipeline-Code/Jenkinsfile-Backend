@@ -119,7 +119,6 @@ pipeline {
                     sudo mv kubectl /usr/local/bin/
                     '''
                 }
-            }
         }
 
         stage('Create namespace in AWS') {
