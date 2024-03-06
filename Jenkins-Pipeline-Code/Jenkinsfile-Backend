@@ -24,29 +24,6 @@ pipeline {
             }
         }
 
-        stage("Docker Image Build") {
-            steps {
-                script {
-                    dir('Application-Code/backend') {
-                        dockerImage = docker.build registry + ":V$BUILD_NUMBER"
-                    }
-                }
-            }
-        }
-
-        stage('Deploy Image') {
-          steps{
-            script {
-                dir('Application-Code/backend') {
-                    docker.withRegistry( '', registryCredential ) {
-                        dockerImage.push("$BUILD_NUMBER")
-                        dockerImage.push('latest')
-                    }
-              }
-            }
-          }
-        }
-
         stage('Sonarqube Analysis') {
             environment {
                 scannerHome = tool 'sonar'
@@ -56,11 +33,7 @@ pipeline {
                 dir('Application-Code/backend') {
                     withSonarQubeEnv('sonar-server') {
                         sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=multicloud-backend \
-                        -Dsonar.projectName=multicloud-backend \
-                        -Dsonar.projectVersion=1.0 \
-                        -Dsonar.java.binaries=target/test-classes/com/rajatsa/account/controllerTest/ \
-                        -Dsonar.junit.reportsPath=target/surefire-reports/ \
-                        -Dsonar.jacoco.reportsPath=target/jacoco.exec'''
+                        -Dsonar.projectName=multicloud-backend'''
                     }
 
                     timeout(time: 10, unit: 'MINUTES') {
@@ -97,6 +70,29 @@ pipeline {
                     sh 'trivy fs . > trivyfs.txt'
                 }
             }
+        }
+
+        stage("Docker Image Build") {
+            steps {
+                script {
+                    dir('Application-Code/backend') {
+                        dockerImage = docker.build registry + ":V$BUILD_NUMBER"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy Image') {
+          steps{
+            script {
+                dir('Application-Code/backend') {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push("$BUILD_NUMBER")
+                        dockerImage.push('latest')
+                    }
+              }
+            }
+          }
         }
 
         stage("TRIVY Image Scan") {

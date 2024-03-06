@@ -24,6 +24,54 @@ pipeline {
             }
         }
 
+        stage('Sonarqube Analysis') {
+            environment {
+                scannerHome = tool 'sonar'
+            }
+
+            steps {
+                dir('Application-Code/frontend') {
+                    withSonarQubeEnv('sonar-server') {
+                        sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=multicloud-frontend \
+                        -Dsonar.projectName=multicloud-frontend'''
+                    }
+
+                    timeout(time: 10, unit: 'MINUTES') {
+                        waitForQualityGate abortPipeline: true
+                    }
+                }
+            }
+        }
+
+        stage('OWASP Dependency-Check Scan') {
+            steps {
+                dir('Application-Code/frontend') {
+                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                }
+            }
+        }
+
+        stage('Install Trivy') {
+            steps {
+                sh '''
+                sudo apt-get install wget apt-transport-https gnupg lsb-release -y
+                wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+                echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+                sudo apt update
+                sudo apt install trivy -y
+                '''
+            }
+        }
+
+        stage('Trivy File Scan') {
+            steps {
+                dir('Application-Code/frontend') {
+                    sh 'trivy fs . > trivyfs.txt'
+                }
+            }
+        }
+
         stage("Docker Image Build") {
             steps {
                 script {
@@ -45,59 +93,6 @@ pipeline {
               }
             }
           }
-        }
-
-        stage('Sonarqube Analysis') {
-            environment {
-                scannerHome = tool 'sonar'
-            }
-
-            steps {
-                dir('Application-Code/frontend') {
-                    withSonarQubeEnv('sonar-server') {
-                        sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=multicloud-frontend \
-                        -Dsonar.projectName=multicloud-frontend \
-                        -Dsonar.projectVersion=1.0 \
-                        -Dsonar.sources=src/ \
-                        -Dsonar.java.binaries=target/test-classes/com/rajatsa/account/controllerTest/ \
-                        -Dsonar.junit.reportsPath=target/surefire-reports/ \
-                        -Dsonar.jacoco.reportsPath=target/jacoco.exec'''
-                    }
-
-                    timeout(time: 10, unit: 'MINUTES') {
-                        waitForQualityGate abortPipeline: true
-                    }
-                }
-            }
-        }
-
-        stage('OWASP Dependency-Check Scan') {
-            steps {
-                dir('Application-Code/frontend') {
-                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
-                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-                }
-            }
-        }
-
-        stage('Trivy File Scan') {
-            steps {
-                dir('Application-Code/frontend') {
-                    sh 'trivy fs . > trivyfs.txt'
-                }
-            }
-        }
-
-        stage('Install Trivy') {
-            steps {
-                sh '''
-                sudo apt-get install wget apt-transport-https gnupg lsb-release -y
-                wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-                echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
-                sudo apt update
-                sudo apt install trivy -y
-                '''
-            }
         }
 
         stage("TRIVY Image Scan") {
