@@ -113,11 +113,8 @@ pipeline {
 
         stage('Kubernetes Deploy on AWS') {
             agent { label 'AWS-KOPS' }
-            environment {
-                KUBECONFIG = '/var/lib/jenkins/.kube/config'
-            }
             steps {
-                sh "helm upgrade --install --force multicloud-stack helm/multicloudcharts --set appimage=${registry}:V${BUILD_NUMBER} --namespace prod"
+                sh "helm upgrade --install --force multicloud-stack helm/multicloudcharts --set appimage=${registry}:V${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
             }
         }
 
@@ -130,11 +127,8 @@ pipeline {
 
         stage('Kubernetes Deploy on GCP') {
             agent { label 'GCP-KOPS' }
-            environment {
-                KUBECONFIG = '/var/lib/jenkins/.kube/config'
-            }
             steps {
-                sh "helm upgrade --install --force multicloud-stack helm/multicloudcharts --set appimage=${registry}:V${BUILD_NUMBER} --namespace prod"
+                sh "helm upgrade --install --force multicloud-stack helm/multicloudcharts --set appimage=${registry}:V${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
             }
         }
     }
