@@ -40,6 +40,7 @@ spec:
         volumeMounts:
           - name: mongo-volume
             mountPath: /data/db
+            readOnly: false
       volumes: 
       - name: mongo-volume
         persistentVolumeClaim:
