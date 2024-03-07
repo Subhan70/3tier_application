@@ -134,7 +134,10 @@ pipeline {
         stage('Create namespace in AWS') {
             steps{
                 withKubeConfig([credentialsId: 'aws-kubefile', serverUrl: 'https://D508A0B02624B7C0BB37F1B09B94B608.gr7.us-east-1.eks.amazonaws.com']) {
-                    sh 'kubectl create namespace prod'
+                    sh '''
+                    kubectl create namespace three-tier
+                    kubectl create namespace prod
+                    '''
                 }
             }
         }
