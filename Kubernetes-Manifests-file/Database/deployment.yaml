@@ -44,5 +44,3 @@ spec:
       - name: mongo-volume
         persistentVolumeClaim:
           claimName: mongo-volume-claim
-          annotations:
-            helm.sh/resource-policy: UpdateReplace
