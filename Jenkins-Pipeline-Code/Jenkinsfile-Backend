@@ -133,7 +133,7 @@ pipeline {
 
         stage('Create namespace in AWS') {
             steps{
-                withKubeConfig([credentialsId: 'aws-kubefile', serverUrl: 'https://D508A0B02624B7C0BB37F1B09B94B608.gr7.us-east-1.eks.amazonaws.com']) {
+                withKubeConfig([credentialsId: 'aws-kubefile', serverUrl: 'https://D508A0B02624B7C0BB37F1B09B94B608.gr7.us-east-1.eks.amazonaws.com']) { // Change serverUrl as per your needs
                     script {
                         def prodExists = sh(script: 'kubectl get namespace prod --ignore-not-found=true', returnStatus: true)
                         def threetierExists = sh(script: 'kubectl get namespace three-tier --ignore-not-found=true', returnStatus: true)
@@ -158,12 +158,52 @@ pipeline {
             }
         }
 
+        // stage('Create namespace in Azure') {
+        //     steps{
+        //         withKubeConfig([credentialsId: 'azure-kubefile', serverUrl: 'https:test.com']) { // Change serverUrl as per your needs
+        //             script {
+        //                 def prodExists = sh(script: 'kubectl get namespace prod --ignore-not-found=true', returnStatus: true)
+        //                 def threetierExists = sh(script: 'kubectl get namespace three-tier --ignore-not-found=true', returnStatus: true)
+        //                 if (prodExists == 0 && threetierExists == 0) {
+        //                     echo "Namespace 'prod' & 'three-tier' already exists. Skipping creation."
+        //                 } else {
+        //                     sh '''
+        //                     kubectl create namespace three-tier
+        //                     kubectl create namespace prod
+        //                     '''
+        //                     echo "Namespace 'prod' & 'three-tier' created successfully."
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
         // stage('Kubernetes Deploy') {
         //     agent { label 'AZURE-KOPS' }
         //         steps {
         //             sh "helm upgrade --install --force multicloud-stack helm/backendcharts --set appimage=${registry}:V${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
         //         }
         // }
+
+        stage('Create namespace in GCP') {
+            steps{
+                withKubeConfig([credentialsId: 'gcp-kubefile', serverUrl: 'https://35.201.208.250']) { // Change serverUrl as per your needs
+                    script {
+                        def prodExists = sh(script: 'kubectl get namespace prod --ignore-not-found=true', returnStatus: true)
+                        def threetierExists = sh(script: 'kubectl get namespace three-tier --ignore-not-found=true', returnStatus: true)
+                        if (prodExists == 0 && threetierExists == 0) {
+                            echo "Namespace 'prod' & 'three-tier' already exists. Skipping creation."
+                        } else {
+                            sh '''
+                            kubectl create namespace three-tier
+                            kubectl create namespace prod
+                            '''
+                            echo "Namespace 'prod' & 'three-tier' created successfully."
+                        }
+                    }
+                }
+            }
+        }
 
         stage('Kubernetes Deploy on GCP') {
             agent { label 'GCP-KOPS' }
