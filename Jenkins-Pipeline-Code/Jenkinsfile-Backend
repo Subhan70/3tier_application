@@ -121,15 +121,15 @@ pipeline {
                 }
         }
 
-        stage('Install AWS Cli v2') {
-            steps{
-                sh '''
-                curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-                unzip awscliv2.zip
-                sudo ./aws/install
-                '''
-            }
-        }
+        // stage('Install AWS Cli v2') {
+        //     steps{
+        //         sh '''
+        //         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        //         unzip awscliv2.zip
+        //         sudo ./aws/install
+        //         '''
+        //     }
+        // }
 
         stage('Create namespace in AWS') {
             steps{
