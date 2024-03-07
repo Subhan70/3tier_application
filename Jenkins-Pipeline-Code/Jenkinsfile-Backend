@@ -154,21 +154,21 @@ pipeline {
         stage('Kubernetes Deploy on AWS') {
             agent { label 'AWS-KOPS' }
             steps {
-                sh "helm upgrade --install --force multicloud-stack helm/multicloudcharts --set backimage=${registry}:V${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
+                sh "helm upgrade --install --force multicloud-stack helm/backendcharts --set backimage=${registry}:V${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
             }
         }
 
         // stage('Kubernetes Deploy') {
         //     agent { label 'AZURE-KOPS' }
         //         steps {
-        //             sh "helm upgrade --install --force multicloud-stack helm/multicloudcharts --set appimage=${registry}:V${BUILD_NUMBER} --namespace prod"
+        //             sh "helm upgrade --install --force multicloud-stack helm/backendcharts --set appimage=${registry}:V${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
         //         }
         // }
 
         stage('Kubernetes Deploy on GCP') {
             agent { label 'GCP-KOPS' }
             steps {
-                sh "helm upgrade --install --force multicloud-stack helm/multicloudcharts --set backimage=${registry}:V${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
+                sh "helm upgrade --install --force multicloud-stack helm/backendcharts --set backimage=${registry}:V${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
             }
         }
     }
