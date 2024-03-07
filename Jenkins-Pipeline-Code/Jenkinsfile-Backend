@@ -151,13 +151,6 @@ pipeline {
             }
         }
 
-        stage('Delete AWS Immutable persistent volume claim pvc in mongo') {
-            agent { label 'AWS-KOPS' }
-            steps {
-                sh "kubectl delete pvc -n three-tier mongo-volume-claim"
-            }
-        }
-
         stage('Kubernetes Deploy on AWS') {
             agent { label 'AWS-KOPS' }
             steps {
@@ -209,14 +202,6 @@ pipeline {
                         }
                     }
                 }
-            }
-        }
-
-        
-        stage('Delete GCP Immutable persistent volume claim pvc in mongo') {
-            agent { label 'GCP-KOPS' }
-            steps {
-                sh "kubectl delete pvc -n three-tier mongo-volume-claim"
             }
         }
 
