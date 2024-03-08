@@ -10,6 +10,3 @@ spec:
   resources:
     requests:
       storage: 4Gi
-    volume.beta.kubernetes.io/aws-ebs: 
-      type: io1
-      iops: 200

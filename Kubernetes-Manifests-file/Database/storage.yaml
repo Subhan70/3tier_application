@@ -7,7 +7,7 @@ volumeBindingMode: WaitForFirstConsumer
 parameters:
   csi.storage.k8s.io/fstype: ext4
   type: io1
-  iopsPerGB: "3"
+  iopsPerGB: "200"
 allowedTopologies:
 - matchLabelExpressions:
   - key: topology.ebs.csi.aws.com/zone
