@@ -76,7 +76,7 @@ pipeline {
             steps {
                 script {
                     dir('Application-Code/backend') {
-                        dockerImage = docker.build registry + ":V$BUILD_NUMBER"
+                        dockerImage = docker.build registry + ":$BUILD_NUMBER"
                     }
                 }
             }
@@ -97,7 +97,7 @@ pipeline {
 
         stage("TRIVY Image Scan") {
             steps {
-                sh "trivy image $registry:V$BUILD_NUMBER > trivyimage.txt" 
+                sh "trivy image $registry:$BUILD_NUMBER > trivyimage.txt" 
             }
         }
 
@@ -105,7 +105,7 @@ pipeline {
           steps{
             script {
                 dir('Application-Code/backend') {
-                    sh "docker rmi $registry:V$BUILD_NUMBER"
+                    sh "docker rmi $registry:$BUILD_NUMBER"
                 }
             }
           }
@@ -154,7 +154,7 @@ pipeline {
         stage('Kubernetes Deploy on AWS') {
             agent { label 'AWS-KOPS' }
             steps {
-                sh "helm upgrade --install --force multicloud-stack helm/backendcharts --set backimage=${registry}:V${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
+                sh "helm upgrade --install --force multicloud-stack helm/backendcharts --set backimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
             }
         }
 
@@ -181,7 +181,7 @@ pipeline {
         // stage('Kubernetes Deploy') {
         //     agent { label 'AZURE-KOPS' }
         //         steps {
-        //             sh "helm upgrade --install --force multicloud-stack helm/backendcharts --set appimage=${registry}:V${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
+        //             sh "helm upgrade --install --force multicloud-stack helm/backendcharts --set appimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
         //         }
         // }
 
@@ -208,7 +208,7 @@ pipeline {
         stage('Kubernetes Deploy on GCP') {
             agent { label 'GCP-KOPS' }
             steps {
-                sh "helm upgrade --install --force multicloud-stack helm/backendcharts --set backimage=${registry}:V${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
+                sh "helm upgrade --install --force multicloud-stack helm/backendcharts --set backimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
             }
         }
     }
