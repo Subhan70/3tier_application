@@ -1,15 +1,15 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: gcp-mongo-sc
-provisioner: pd.csi.storage.gke.io
+  name: mongo-sc
+provisioner: ebs.csi.aws.com
 volumeBindingMode: WaitForFirstConsumer
 parameters:
   csi.storage.k8s.io/fstype: ext4
-  type: pd-standard
-  provisioned-iops-on-create: "200"
+  type: gp2
+  iopsPerGB: "200"
 allowedTopologies:
 - matchLabelExpressions:
-  - key: topology.gke.io/zone
+  - key: topology.ebs.csi.aws.com/zone
     values:
-    - asia-east1-a
+    - us-east-1b
