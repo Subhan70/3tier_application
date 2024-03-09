@@ -41,13 +41,7 @@ spec:
           - name: aws-mongo-volume
             mountPath: /aws-data/db
             readOnly: false
-          - name: gcp-mongo-volume
-            mountPath: /gcp-data/db
-            readOnly: false
       volumes: 
       - name: aws-mongo-volume
         persistentVolumeClaim:
           claimName: aws-mongo-vclaim
-      - name: gcp-mongo-volume
-        persistentVolumeClaim:
-          claimName: gcp-mongo-vclaim
