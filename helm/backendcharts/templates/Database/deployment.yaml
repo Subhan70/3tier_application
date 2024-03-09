@@ -39,10 +39,10 @@ spec:
                 key: password
         volumeMounts:
           - name: aws-mongo-volume
-            mountPath: /data/db
+            mountPath: /aws-data/db
             readOnly: false
           - name: gcp-mongo-volume
-            mountPath: /data/db
+            mountPath: /gcp-data/db
             readOnly: false
       volumes: 
       - name: aws-mongo-volume
