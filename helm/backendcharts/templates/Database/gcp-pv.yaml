@@ -4,9 +4,10 @@ metadata:
   name: gcp-mongo-pv
 spec:
   capacity:
-    storage: 10Gi
+    storage: 4Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
   storageClassName: gcp-mongo-sc
   persistentVolumeReclaimPolicy: Retain
+  type: pd-standard
