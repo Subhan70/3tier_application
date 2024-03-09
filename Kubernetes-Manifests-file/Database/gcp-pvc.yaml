@@ -9,4 +9,4 @@ spec:
   storageClassName: gcp-mongo-sc
   resources:
     requests:
-      storage: 4Gi
+      storage: 10Gi

@@ -4,10 +4,17 @@ metadata:
   name: gcp-mongo-pv
 spec:
   capacity:
-    storage: 4Gi
+    storage: 10Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
   storageClassName: gcp-mongo-sc
   persistentVolumeReclaimPolicy: Retain
-  type: pd-standard
+  csi:
+    driver: pd.csi.storage.gke.io
+    volumeHandle: db-disk  # Replace with your actual PD disk name
+    volumeAttributes:
+      type: pd-standard
+      provisioned-iops-on-create: "200"
+      fsType: ext4
+      zone: asia-east1-a

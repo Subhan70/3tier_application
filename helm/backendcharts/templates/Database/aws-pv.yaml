@@ -10,4 +10,11 @@ spec:
     - ReadWriteOnce
   storageClassName: aws-mongo-sc
   persistentVolumeReclaimPolicy: Retain
-  type: gp2
+  csi:
+    driver: ebs.csi.aws.com
+    volumeHandle: vol-06ca29420b3e9172f  # Replace with your actual EBS volume ID
+    volumeAttributes:
+      type: gp2
+      iopsPerGB: "200"
+      fsType: ext4
+      zone: us-east-1b
