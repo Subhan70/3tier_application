@@ -6,7 +6,7 @@ metadata:
 spec: 
   accessModes:  
     - ReadWriteOnce
-  storageClassName: mongo-sc
+  storageClassName: mongo-sc-ssd
   resources:
     requests:
       storage: 4Gi
