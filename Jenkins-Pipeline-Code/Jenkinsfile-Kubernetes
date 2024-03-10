@@ -7,8 +7,8 @@ pipeline {
     }
 
     environment  {
-        frontregistry = 'rajatsa/frontmulticloud'
         backregistry = 'rajatsa/backmulticloud'
+        frontregistry = 'rajatsa/frontmulticloud'
         registryCredential = 'dockerhub'
     }
 
@@ -31,6 +31,17 @@ pipeline {
             }
 
             steps {
+                dir('Application-Code/backend') {
+                    withSonarQubeEnv('sonar-server') {
+                        sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=multicloud-backend \
+                        -Dsonar.projectName=multicloud-backend'''
+                    }
+
+                    timeout(time: 10, unit: 'MINUTES') {
+                        waitForQualityGate abortPipeline: true
+                    }
+                }
+
                 dir('Application-Code/frontend') {
                     withSonarQubeEnv('sonar-server') {
                         sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=multicloud-frontend \
@@ -46,6 +57,11 @@ pipeline {
 
         stage('OWASP Dependency-Check Scan') {
             steps {
+                dir('Application-Code/backend') {
+                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                }
+
                 dir('Application-Code/frontend') {
                     dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
                     dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
@@ -67,8 +83,12 @@ pipeline {
 
         stage('Trivy File Scan') {
             steps {
+                dir('Application-Code/backend') {
+                    sh 'trivy fs . > back-trivyfs.txt'
+                }
+
                 dir('Application-Code/frontend') {
-                    sh 'trivy fs . > trivyfs.txt'
+                    sh 'trivy fs . > front-trivyfs.txt'
                 }
             }
         }
@@ -76,6 +96,10 @@ pipeline {
         stage("Docker Image Build") {
             steps {
                 script {
+                    dir('Application-Code/backend') {
+                        dockerImage = docker.build backregistry + ":$BUILD_NUMBER"
+                    }
+
                     dir('Application-Code/frontend') {
                         dockerImage = docker.build frontregistry + ":$BUILD_NUMBER"
                     }
@@ -86,25 +110,39 @@ pipeline {
         stage('Deploy Image') {
           steps{
             script {
+                dir('Application-Code/backend') {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push("$BUILD_NUMBER")
+                        dockerImage.push('latest')
+                    }
+                }
+
                 dir('Application-Code/frontend') {
                     docker.withRegistry( '', registryCredential ) {
                         dockerImage.push("$BUILD_NUMBER")
                         dockerImage.push('latest')
                     }
-              }
+                }
             }
           }
         }
 
         stage("TRIVY Image Scan") {
             steps {
-                sh "trivy image $frontregistry:$BUILD_NUMBER > trivyimage.txt" 
+                sh '''
+                trivy image $backregistry:$BUILD_NUMBER > back-trivyimage.txt
+                trivy image $frontregistry:$BUILD_NUMBER > front-trivyimage.txt
+                '''
             }
         }
 
         stage('Remove Unused docker image') {
           steps{
             script {
+                dir('Application-Code/backend') {
+                    sh "docker rmi $backregistry:$BUILD_NUMBER"
+                }
+
                 dir('Application-Code/frontend') {
                     sh "docker rmi $frontregistry:$BUILD_NUMBER"
                 }
