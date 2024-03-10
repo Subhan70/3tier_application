@@ -99,16 +99,6 @@ pipeline {
                     dir('Application-Code/backend') {
                         dockerImage = docker.build backregistry + ":$BUILD_NUMBER"
                     }
-                }
-            }
-        }
-
-        stage("Docker Image Build") {
-            steps {
-                script {
-                    dir('Application-Code/backend') {
-                        dockerImage = docker.build backregistry + ":$BUILD_NUMBER"
-                    }
 
                     dir('Application-Code/frontend') {
                         dockerImage = docker.build frontregistry + ":$BUILD_NUMBER"
