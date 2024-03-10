@@ -1,0 +1,71 @@
+pipeline {
+    agent any
+
+    environment  {
+        clusterName = 'threetier-eks'
+    }
+
+    stages {
+        stage('Cleaning Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
+        stage('Create IAM Policy') {
+            agent { label 'AWS-KOPS' }
+            steps {
+                script {
+                    sh 'curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/install/iam_policy.json'
+                }
+            }
+        }
+
+        stage('Create IAM Policy') {
+            agent { label 'AWS-KOPS' }
+            steps {
+                script {
+                    sh """
+                    aws iam create-policy \
+                        --policy-name AWSLoadBalancerControllerIAMPolicy \
+                        --policy-document file://iam_policy.json
+                    """
+                }
+            }
+        }
+
+        stage('Create Service Account') {
+            agent { label 'AWS-KOPS' }
+            steps {
+                script {
+                    sh """
+                    eksctl create iamserviceaccount \
+                        --cluster=$clusterName \
+                        --namespace=kube-system \
+                        --name=aws-load-balancer-controller \
+                        --role-name AmazonEKSLoadBalancerControllerRole \
+                        --attach-policy-arn=arn:aws:iam::694136327666:policy/AWSLoadBalancerControllerIAMPolicy \
+                        --approve
+                    """
+                }
+            }
+        }
+
+        stage('Deploy AWS Load Balancer Controller') {
+            agent { label 'AWS-KOPS' }
+            steps {
+                script {
+                    def version = 'v2.5.4'
+                    sh """
+                    curl -L https://github.com/aws/eks-charts/releases/download/$version/aws-load-balancer-controller-$version.tgz | tar zxvf -
+                    cd aws-load-balancer-controller-$version
+                    helm upgrade -i aws-load-balancer-controller . \\
+                        --set clusterName=$clusterName \\
+                        --set serviceAccount.create=false \\
+                        --set serviceAccount.name=aws-load-balancer-controller
+                    """
+                }
+            }
+        }
+    }
+}
