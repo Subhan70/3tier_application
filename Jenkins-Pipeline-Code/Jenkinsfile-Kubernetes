@@ -99,6 +99,16 @@ pipeline {
                     dir('Application-Code/backend') {
                         dockerImage = docker.build backregistry + ":$BUILD_NUMBER"
                     }
+                }
+            }
+        }
+
+        stage("Docker Image Build") {
+            steps {
+                script {
+                    dir('Application-Code/backend') {
+                        dockerImage = docker.build backregistry + ":$BUILD_NUMBER"
+                    }
 
                     dir('Application-Code/frontend') {
                         dockerImage = docker.build frontregistry + ":$BUILD_NUMBER"
@@ -107,7 +117,7 @@ pipeline {
             }
         }
 
-        stage('Deploy Image') {
+        stage('Deploy Backend Image') {
           steps{
             script {
                 dir('Application-Code/backend') {
@@ -116,7 +126,13 @@ pipeline {
                         dockerImage.push('latest')
                     }
                 }
+            }
+          }
+        }
 
+        stage('Deploy Frontend Image') {
+          steps{
+            script {
                 dir('Application-Code/frontend') {
                     docker.withRegistry( '', registryCredential ) {
                         dockerImage.push("$BUILD_NUMBER")
