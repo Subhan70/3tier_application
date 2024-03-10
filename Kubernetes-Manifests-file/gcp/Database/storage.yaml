@@ -7,7 +7,6 @@ volumeBindingMode: WaitForFirstConsumer
 parameters:
   csi.storage.k8s.io/fstype: NTFS
   type: pd-standard
-  provisioned-iops-on-create: "200"
 allowedTopologies:
 - matchLabelExpressions:
   - key: topology.gke.io/zone
