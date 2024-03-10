@@ -144,7 +144,7 @@ pipeline {
         stage('Kubernetes Deploy on AWS') {
             agent { label 'AWS-KOPS' }
                 steps {
-                    sh "helm upgrade --install --force multicloud-stack helm/aws --set frontimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
+                    sh "helm upgrade --install --force multicloud-stack helm/aws/frontendcharts --set frontimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
                 }
         }
 
@@ -171,7 +171,7 @@ pipeline {
         // stage('Kubernetes Deploy on Azure') {
         //     agent { label 'AZURE-KOPS' }
         //         steps {
-        //             sh "helm upgrade --install --force multicloud-stack helm/azure --set appimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
+        //             sh "helm upgrade --install --force multicloud-stack helm/azure/frontendcharts --set appimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
         //         }
         // }
 
@@ -198,7 +198,7 @@ pipeline {
         stage('Kubernetes Deploy on GCP') {
             agent { label 'GCP-KOPS' }
                 steps {
-                    sh "helm upgrade --install --force multicloud-stack helm/gcp --set frontimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
+                    sh "helm upgrade --install --force multicloud-stack helm/gcp/frontendcharts --set frontimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
                 }
         }
     }
