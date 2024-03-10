@@ -178,10 +178,10 @@ pipeline {
         //     }
         // }
 
-        // stage('Kubernetes Deploy') {
+        // stage('Kubernetes Deploy on Azure') {
         //     agent { label 'AZURE-KOPS' }
         //         steps {
-        //             sh "helm upgrade --install --force multicloud-stack helm/backendcharts --set appimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
+        //             sh "helm upgrade --install --force multicloud-stack helm/azure/backendcharts --set appimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
         //         }
         // }
 

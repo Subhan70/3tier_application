@@ -76,7 +76,7 @@ pipeline {
             steps {
                 script {
                     dir('Application-Code/frontend') {
-                        dockerImage = docker.build registry + ":V$BUILD_NUMBER"
+                        dockerImage = docker.build registry + ":$BUILD_NUMBER"
                     }
                 }
             }
@@ -97,7 +97,7 @@ pipeline {
 
         stage("TRIVY Image Scan") {
             steps {
-                sh "trivy image $registry:V$BUILD_NUMBER > trivyimage.txt" 
+                sh "trivy image $registry:$BUILD_NUMBER > trivyimage.txt" 
             }
         }
 
@@ -105,30 +105,100 @@ pipeline {
           steps{
             script {
                 dir('Application-Code/frontend') {
-                    sh "docker rmi $registry:V$BUILD_NUMBER"
+                    sh "docker rmi $registry:$BUILD_NUMBER"
                 }
             }
           }
         }
 
-        stage('Kubernetes Deploy on AWS') {
-            agent { label 'AWS-KOPS' }
-                steps {
-                    sh "helm upgrade --install --force multicloud-stack helm/frontendcharts --set frontimage=${registry}:V${BUILD_NUMBER} --namespace prod"
+        stage('Install kubectl') {
+            steps{
+                    sh '''
+                    curl -LO https://dl.k8s.io/release/v1.23.6/bin/linux/amd64/kubectl
+                    sudo chmod +x ./kubectl
+                    sudo mv kubectl /usr/local/bin/
+                    '''
                 }
         }
 
-        // stage('Kubernetes Deploy') {
+        stage('Create namespace in AWS') {
+            steps{
+                withKubeConfig([credentialsId: 'aws-kubefile', serverUrl: 'https://D508A0B02624B7C0BB37F1B09B94B608.gr7.us-east-1.eks.amazonaws.com']) { // Change serverUrl as per your needs
+                    script {
+                        def prodExists = sh(script: 'kubectl get namespace prod --ignore-not-found=true', returnStatus: true)
+                        def threetierExists = sh(script: 'kubectl get namespace three-tier --ignore-not-found=true', returnStatus: true)
+                        if (prodExists == 0 && threetierExists == 0) {
+                            echo "Namespace 'prod' & 'three-tier' already exists. Skipping creation."
+                        } else {
+                            sh '''
+                            kubectl create namespace three-tier
+                            kubectl create namespace prod
+                            '''
+                            echo "Namespace 'prod' & 'three-tier' created successfully."
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Kubernetes Deploy on AWS') {
+            agent { label 'AWS-KOPS' }
+                steps {
+                    sh "helm upgrade --install --force multicloud-stack helm/aws/frontendcharts --set frontimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
+                }
+        }
+
+        // stage('Create namespace in Azure') {
+        //     steps{
+        //         withKubeConfig([credentialsId: 'azure-kubefile', serverUrl: 'https:test.com']) { // Change serverUrl as per your needs
+        //             script {
+        //                 def prodExists = sh(script: 'kubectl get namespace prod --ignore-not-found=true', returnStatus: true)
+        //                 def threetierExists = sh(script: 'kubectl get namespace three-tier --ignore-not-found=true', returnStatus: true)
+        //                 if (prodExists == 0 && threetierExists == 0) {
+        //                     echo "Namespace 'prod' & 'three-tier' already exists. Skipping creation."
+        //                 } else {
+        //                     sh '''
+        //                     kubectl create namespace three-tier
+        //                     kubectl create namespace prod
+        //                     '''
+        //                     echo "Namespace 'prod' & 'three-tier' created successfully."
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        // stage('Kubernetes Deploy on Azure') {
         //     agent { label 'AZURE-KOPS' }
         //         steps {
-        //             sh "helm upgrade --install --force multicloud-stack helm/multicloudcharts --set appimage=${registry}:V${BUILD_NUMBER} --namespace prod"
+        //             sh "helm upgrade --install --force multicloud-stack helm/azure/frontendcharts --set appimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
         //         }
         // }
+
+        stage('Create namespace in GCP') {
+            steps{
+                withKubeConfig([credentialsId: 'gcp-kubefile', serverUrl: 'https://35.201.208.250']) { // Change serverUrl as per your needs
+                    script {
+                        def prodExists = sh(script: 'kubectl get namespace prod --ignore-not-found=true', returnStatus: true)
+                        def threetierExists = sh(script: 'kubectl get namespace three-tier --ignore-not-found=true', returnStatus: true)
+                        if (prodExists == 0 && threetierExists == 0) {
+                            echo "Namespace 'prod' & 'three-tier' already exists. Skipping creation."
+                        } else {
+                            sh '''
+                            kubectl create namespace three-tier
+                            kubectl create namespace prod
+                            '''
+                            echo "Namespace 'prod' & 'three-tier' created successfully."
+                        }
+                    }
+                }
+            }
+        }
 
         stage('Kubernetes Deploy on GCP') {
             agent { label 'GCP-KOPS' }
                 steps {
-                    sh "helm upgrade --install --force multicloud-stack helm/frontendcharts --set frontimage=${registry}:V${BUILD_NUMBER} --namespace prod"
+                    sh "helm upgrade --install --force multicloud-stack helm/gcp/frontendcharts --set frontimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config"
                 }
         }
     }
