@@ -12,7 +12,7 @@ pipeline {
             }
         }
 
-        stage('Create IAM Policy') {
+        stage('Download IAM Policy') {
             agent { label 'AWS-KOPS' }
             steps {
                 script {
