@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mongo-volume-claim
+  name: aws-mongo-vclaim
   namespace: three-tier
 spec: 
   accessModes:  
     - ReadWriteOnce
-  storageClassName: mongo-sc
+  storageClassName: aws-mongo-sc
   resources:
     requests:
       storage: 4Gi

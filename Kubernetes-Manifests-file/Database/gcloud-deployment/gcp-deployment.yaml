@@ -2,16 +2,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata: 
   namespace: three-tier
-  name: mongodb
+  name: gcp-mongodb
 spec: 
   replicas: 1
   selector:
     matchLabels:
-      app: mongodb
+      app: gcp-mongodb
   template:
     metadata:
       labels: 
-        app: mongodb
+        app: gcp-mongodb
     spec: 
       containers:
       - name: mon
@@ -38,10 +38,10 @@ spec:
                 name: mongo-sec
                 key: password
         volumeMounts:
-          - name: mongo-volume
+          - name: gcp-mongo-volume
             mountPath: /data/db
             readOnly: false
-      volumes: 
-      - name: mongo-volume
+      volumes:
+      - name: gcp-mongo-volume
         persistentVolumeClaim:
-          claimName: mongo-volume-claim
+          claimName: gcp-mongo-vclaim
