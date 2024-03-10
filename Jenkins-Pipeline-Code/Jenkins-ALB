@@ -21,18 +21,18 @@ pipeline {
             }
         }
 
-        // stage('Create IAM Policy') {
-        //     agent { label 'AWS-KOPS' }
-        //     steps {
-        //         script {
-        //             sh """
-        //             aws iam create-policy \
-        //                 --policy-name AWSLoadBalancerControllerIAMPolicy \
-        //                 --policy-document file://iam_policy.json
-        //             """
-        //         }
-        //     }
-        // }
+        stage('Create IAM Policy') {
+            agent { label 'AWS-KOPS' }
+            steps {
+                script {
+                    sh """
+                    aws iam create-policy \
+                        --policy-name AWSLoadBalancerControllerIAMPolicy \
+                        --policy-document file://iam_policy.json
+                    """
+                }
+            }
+        }
 
         stage('Create Service Account') {
             agent { label 'AWS-KOPS' }

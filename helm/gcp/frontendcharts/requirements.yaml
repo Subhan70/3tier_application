@@ -1,0 +1,3 @@
+dependencies:
+  - name: backendcharts
+    repository: file://../backendcharts
