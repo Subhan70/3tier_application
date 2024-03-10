@@ -1,12 +1,12 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: mongo-sc
+  name: mongo-sc-ssd
 provisioner: pd.csi.storage.gke.io
 volumeBindingMode: WaitForFirstConsumer
 parameters:
-  csi.storage.k8s.io/fstype: NTFS
-  type: pd-standard
+  csi.storage.k8s.io/fstype: ext4
+  type: pd-ssd
 allowedTopologies:
 - matchLabelExpressions:
   - key: topology.gke.io/zone
