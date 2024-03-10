@@ -55,14 +55,14 @@ pipeline {
             agent { label 'AWS-KOPS' }
             steps {
                 script {
-                    def version = 'v2.5.4'
                     sh """
-                    curl -L https://github.com/aws/eks-charts/releases/download/$version/aws-load-balancer-controller-$version.tgz | tar zxvf -
-                    cd aws-load-balancer-controller-$version
-                    helm upgrade -i aws-load-balancer-controller . \\
-                        --set clusterName=$clusterName \\
-                        --set serviceAccount.create=false \\
-                        --set serviceAccount.name=aws-load-balancer-controller
+                    helm repo add eks https://aws.github.io/eks-charts
+                    helm repo update eks
+                    helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+                        -n kube-system \
+                        --set clusterName=$clusterName \
+                        --set serviceAccount.create=false \
+                        --set serviceAccount.name=aws-load-balancer-controller 
                     """
                 }
             }
