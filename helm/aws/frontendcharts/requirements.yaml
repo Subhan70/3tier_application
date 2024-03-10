@@ -1,3 +1,4 @@
 dependencies:
   - name: backendcharts
-    repository: file://../backendcharts
+    version: "1.0.0"
+    repository: "file://../backendcharts"
