@@ -7,7 +7,8 @@ pipeline {
     }
 
     environment  {
-        registry = 'rajatsa/frontmulticloud'
+        frontregistry = 'rajatsa/frontmulticloud'
+        backregistry = 'rajatsa/backmulticloud'
         registryCredential = 'dockerhub'
     }
 
@@ -76,7 +77,7 @@ pipeline {
             steps {
                 script {
                     dir('Application-Code/frontend') {
-                        dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                        dockerImage = docker.build frontregistry + ":$BUILD_NUMBER"
                     }
                 }
             }
@@ -97,7 +98,7 @@ pipeline {
 
         stage("TRIVY Image Scan") {
             steps {
-                sh "trivy image $registry:$BUILD_NUMBER > trivyimage.txt" 
+                sh "trivy image $frontregistry:$BUILD_NUMBER > trivyimage.txt" 
             }
         }
 
@@ -105,7 +106,7 @@ pipeline {
           steps{
             script {
                 dir('Application-Code/frontend') {
-                    sh "docker rmi $registry:$BUILD_NUMBER"
+                    sh "docker rmi $frontregistry:$BUILD_NUMBER"
                 }
             }
           }
@@ -144,7 +145,7 @@ pipeline {
         stage('Kubernetes Deploy on AWS') {
             agent { label 'AWS-KOPS' }
                 steps {
-                    sh "helm upgrade --install --force multicloud-stack helm/aws/frontendcharts --set frontimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config --dependency-update"
+                    sh "helm upgrade --install --force multicloud-stack helm/aws --set backimage=${backregistry}:${BUILD_NUMBER} --set frontimage=${frontregistry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config --dependency-update"
                 }
         }
 
@@ -171,7 +172,7 @@ pipeline {
         // stage('Kubernetes Deploy on Azure') {
         //     agent { label 'AZURE-KOPS' }
         //         steps {
-        //             sh "helm upgrade --install --force multicloud-stack helm/azure/frontendcharts --set appimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config --dependency-update"
+        //             sh "helm upgrade --install --force multicloud-stack helm/azure --set backimage=${backregistry}:${BUILD_NUMBER} --set frontimage=${frontregistry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config --dependency-update"
         //         }
         // }
 
@@ -198,7 +199,7 @@ pipeline {
         stage('Kubernetes Deploy on GCP') {
             agent { label 'GCP-KOPS' }
                 steps {
-                    sh "helm upgrade --install --force multicloud-stack helm/gcp/frontendcharts --set frontimage=${registry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config --dependency-update"
+                    sh "helm upgrade --install --force multicloud-stack helm/gcp --set backimage=${backregistry}:${BUILD_NUMBER} --set frontimage=${frontregistry}:${BUILD_NUMBER} --namespace prod --kubeconfig ~/.kube/config --dependency-update"
                 }
         }
     }
