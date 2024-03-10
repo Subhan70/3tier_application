@@ -6,7 +6,7 @@ provisioner: pd.csi.storage.gke.io
 volumeBindingMode: WaitForFirstConsumer
 parameters:
   csi.storage.k8s.io/fstype: NTFS
-  type: pd-standard-ssd
+  type: pd-ssd
 allowedTopologies:
 - matchLabelExpressions:
   - key: topology.gke.io/zone
