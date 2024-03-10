@@ -5,7 +5,7 @@ metadata:
   name: mongodb-svc
 spec:
   selector:
-    app: mongodb
+    app: gcp-mongodb
   ports:
   - name: mongodb-svc
     protocol: TCP
