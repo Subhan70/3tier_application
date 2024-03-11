@@ -10,7 +10,7 @@ metadata:
     kubernetes.io/ingress.class: "gce"
 spec:
   rules:
-    - host: multicloud-threetier.rrsinfo.xyz
+    - host: gcp-multicloud-threetier.rrsinfo.xyz
       http:
         paths:
           - path: /api

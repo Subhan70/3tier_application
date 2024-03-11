@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-    - host: multicloud-threetier.rrsinfo.xyz
+    - host: aws-multicloud-threetier.rrsinfo.xyz
       http:
         paths:
           - path: /api
