@@ -9,7 +9,6 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
     kubernetes.io/ingress.class: "gce"
 spec:
-  ingressClassName: alb
   rules:
     - host: multicloud-threetier.rrsinfo.xyz
       http:
