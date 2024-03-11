@@ -29,6 +29,6 @@ spec:
         imagePullPolicy: Always
         env:
           - name: REACT_APP_BACKEND_URL
-            value: "http://multicloud-threetier.rrsinfo.xyz/api/tasks"
+            value: "http://gcp-multicloud-threetier.rrsinfo.xyz/api/tasks"
         ports:
         - containerPort: 3000
