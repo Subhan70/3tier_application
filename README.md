@@ -1,16 +1,14 @@
 # #TWSThreeTierAppChallenge
 
 ## Overview
-This repository hosts the `#TWSThreeTierAppChallenge` for the TWS community. 
-The challenge involves deploying a Three-Tier Web Application using ReactJS, NodeJS, and MongoDB, with deployment on AWS EKS. Participants are encouraged to deploy the application, add creative enhancements, and submit a Pull Request (PR). Merged PRs will earn exciting prizes!
+The challenge involves deploying a Three-Tier Web Application using ReactJS, NodeJS, and MongoDB across Multi-Cloud Platforms. This repository contains Jenkins pipelines for deploying infrastructure using Terraform, installing ALB Ingress Controller, and building and deploying Docker images to Kubernetes. 
 
-**Get The Challenge here**
+**Project Architecture**
 
-[![YouTube Video](https://img.youtube.com/vi/tvWQRTbMS1g/maxresdefault.jpg)](https://youtu.be/tvWQRTbMS1g?si=eki-boMemxr4PU7-)
+![Project Architecture](https://github.com/rajatsardesai/Terraform-Multi-Cloud-Deployment/assets/29860438/27dd943d-9175-46a0-a2b7-f852351e5be0)
 
-## Prerequisites
-- Basic knowledge of Docker, and AWS services.
-- An AWS account with necessary permissions.
+## Contribution Opportunity
+Contribute by completing the Azure part of the project, including setting up Azure resources, configuring Azure pipelines, writing kubernetes menifests file for azure and addressing any Azure-specific troubleshooting steps. Your expertise can help enhance the project's multi-cloud capabilities and provide a comprehensive deployment solution.
 
 ## Challenge Steps
 - [Application Code](#application-code)
@@ -25,118 +23,68 @@ The `Application-Code` directory contains the source code for the Three-Tier Web
 ## Jenkins Pipeline Code
 In the `Jenkins-Pipeline-Code` directory, you'll find Jenkins pipeline scripts. These scripts automate the CI/CD process, ensuring smooth integration and deployment of your application.
 
-## Jenkins Server Terraform
-Explore the `Jenkins-Server-TF` directory to find Terraform scripts for setting up the Jenkins Server on AWS. These scripts simplify the infrastructure provisioning process.
+## Jenkins Terraform
+Explore the `terraform` directory to find Terraform scripts for setting up the Jenkins Server on AWS, Azure and GCP. These scripts simplify the infrastructure provisioning process.
 
 ## Kubernetes Manifests Files
-The `Kubernetes-Manifests-Files` directory holds Kubernetes manifests for deploying your application on AWS EKS. Understand and customize these files to suit your project needs.
+The `Kubernetes-Manifests-Files` directory holds Kubernetes manifests for deploying your application on AWS EKS, Azure AKS and GCP GKE. Understand and customize these files to suit your project needs.
 
 ## Project Details
 🛠️ **Tools Explored:**
-- Terraform & AWS CLI for AWS infrastructure
-- Jenkins, Sonarqube, Terraform, Kubectl, and more for CI/CD setup
-- Helm, Prometheus, and Grafana for Monitoring
-- ArgoCD for GitOps practices
+- Terraform & AWS, Azure & GCP CLI for multicloud infrastructure
+- Jenkins, Sonarqube, Terraform, Kops, Kubectl, and more for CI/CD setup
 
 🚢 **High-Level Overview:**
-- IAM User setup & Terraform magic on AWS
-- Jenkins deployment with AWS integration
-- EKS Cluster creation & Load Balancer configuration
-- Private ECR repositories for secure image management
+- IAM User, Service account setup & Terraform Jenkins magic on AWS, Azure and GCP
+- Kubernetes Jenkins deployment with AWS, Azure and GCP integration
+- EKS, AKS and GKE Cluster creation & Load Balancer configuration
 - Helm charts for efficient monitoring setup
-- GitOps with ArgoCD - the cherry on top!
 
-📈 **The journey covered everything from setting up tools to deploying a Three-Tier app, ensuring data persistence, and implementing CI/CD pipelines.**
+📈 **The journey covered everything from setting up tools to deploying a Three-Tier app on multicloud, ensuring data persistence, and implementing CI/CD pipelines.**
 
-## Getting Started
-To get started with this project, refer to our [comprehensive guide](https://amanpathakdevops.medium.com/advanced-end-to-end-devsecops-kubernetes-three-tier-project-using-aws-eks-argocd-prometheus-fbbfdb956d1a) that walks you through IAM user setup, infrastructure provisioning, CI/CD pipeline configuration, EKS cluster creation, and more.
-
-### Step 1: IAM Configuration
-- Create a user `eks-admin` with `AdministratorAccess`.
-- Generate Security Credentials: Access Key and Secret Access Key.
-
-### Step 2: EC2 Setup
-- Launch an Ubuntu instance in your favourite region (eg. region `us-west-2`).
-- SSH into the instance from your local machine.
-
-### Step 3: Install AWS CLI v2
+## Prerequisites
+### Terraform Pipeline (Jenkinsfile-Terraform)
+- Storage Buckets: Create storage buckets in all cloud services.
+- IAM Setup: Create IAM user, Entra ID, and GCP service account.
+- Jenkins Setup: Setup Jenkins instance on any one of the cloud provider and add GCP, AWS, and bucket credentials.
+- Azure Setup: Add Azure security realm and authorization Azure credentials. Assign Contributor role to the service principal.
+- GCP Setup: Add the secret-key file to the credentials without any plugin.
+- Jenkins Plugins: Install necessary Jenkins plugins including AWS Pipeline Steps, Google Cloud SDK, Azure Credentials, Azure CLI, Microsoft Entra ID, Google Kubernetes Engine, CloudBees Docker Build and Publish, and OWASP Dependency-CheckVersion.
+- Verify Azure Subscription ID: Assign Azure roles using by running following command using Azure CLI.
 ``` shell
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-sudo apt install unzip
-unzip awscliv2.zip
-sudo ./aws/install -i /usr/local/aws-cli -b /usr/local/bin --update
-aws configure
+az ad sp list --display-name three-tier-multistage
+az role assignment create --assignee "{appId}" \
+--role "{roleNameOrId}" \
+--scope "/subscriptions/{subscriptionId}"
 ```
+- Google Cloud SDK: Install Google Cloud SDK on the Jenkins server and configure its path in the global settings of Jenkins. Also, configure the plugin in tools and add GCP credentials.
+- Environment Variables: Add export GOOGLE_APPLICATION_CREDENTIALS=/root/.config/gcloud/gcp_service-account-key.json in ~/.bashrc file of the Jenkins server and set GOOGLE_APPLICATION_CREDENTIALS as an environmental variable in Jenkins.
+- JDK Installation: Install the latest version of JDK and set JAVA_HOME.
+- Kubernetes Installation: Install kubernetes cli version v1.23.6.
 
-### Step 4: Install Docker
-``` shell
-sudo apt-get update
-sudo apt install docker.io
-docker ps
-sudo chown $USER /var/run/docker.sock
-```
+### ALB Ingress Controller Installation Pipeline (Jenkinsfile-ALB)
+- Ensure Kubernetes cluster is up and running.
+- Helm is installed on the Kubernetes cluster.
 
-### Step 5: Install kubectl
-``` shell
-curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.19.6/2021-01-05/bin/linux/amd64/kubectl
-chmod +x ./kubectl
-sudo mv ./kubectl /usr/local/bin
-kubectl version --short --client
-```
+### Docker Image Build and Deployment Pipeline (Jenkinsfile-Kubernetes)
+- Kops Instance: Create Kops instance and bucket on each cloud provider and Create folder /opt/jenkins-slave.
+- Sonar Server: Install Sonar server on any one of the cloud provider.
+- Sonar Setup: Create a token from Sonar server, install Sonar plugin in Jenkins, and add the token to it.
+- Docker Credentials: Add Docker credentials to Jenkins and install Docker on the Jenkins server to build images. Add Jenkins to the Docker group.
+- Helm Installation: Install Helm in AWS, GCP, and Azure kops VMs.
+- Jenkins Slaves: Add all Kops instances as a slave in Jenkins. Install JDK-17 or latest JDK on Kops server and make Ubuntu the owner of the directory jenkins-slave. Allow Kops security group to SSH from Jenkins security group by adding port 22 to Jenkins security group.
+- Amazon EBS CSI Driver Add-on: Enable Amazon EBS CSI Driver manually in addons section of cluster in aws console and create IAM policy for the same referring to following link: https://docs.aws.amazon.com/eks/latest/userguide/csi-iam-role.html
+- Upload kubectl file: Upload kubectl file of aws, azure and gcp as a secret file credential in Jenkins.
 
-### Step 6: Install eksctl
-``` shell
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-sudo mv /tmp/eksctl /usr/local/bin
-eksctl version
-```
-
-### Step 7: Setup EKS Cluster
-``` shell
-eksctl create cluster --name three-tier-cluster --region us-west-2 --node-type t2.medium --nodes-min 2 --nodes-max 2
-aws eks update-kubeconfig --region us-west-2 --name three-tier-cluster
-kubectl get nodes
-```
-
-### Step 8: Run Manifests
-``` shell
-kubectl create namespace workshop
-kubectl apply -f .
-kubectl delete -f .
-```
-
-### Step 9: Install AWS Load Balancer
-``` shell
-curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/install/iam_policy.json
-aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json
-eksctl utils associate-iam-oidc-provider --region=us-west-2 --cluster=three-tier-cluster --approve
-eksctl create iamserviceaccount --cluster=three-tier-cluster --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::626072240565:policy/AWSLoadBalancerControllerIAMPolicy --approve --region=us-west-2
-```
-
-### Step 10: Deploy AWS Load Balancer Controller
-``` shell
-sudo snap install helm --classic
-helm repo add eks https://aws.github.io/eks-charts
-helm repo update eks
-helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=my-cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
-kubectl get deployment -n kube-system aws-load-balancer-controller
-kubectl apply -f full_stack_lb.yaml
-```
-
-### Cleanup
-- To delete the EKS cluster:
-``` shell
-eksctl delete cluster --name three-tier-cluster --region us-west-2
-```
+### Important Notes
+- Please use the credential ID name mentioned in Jenkins code or rename it as per your needs.
+- Change the serverUrl of Create namespace stage in Jenkins-Kubernetes file.
 
 ## Contribution Guidelines
 - Fork the repository and create your feature branch.
 - Deploy the application, adding your creative enhancements.
 - Ensure your code adheres to the project's style and contribution guidelines.
 - Submit a Pull Request with a detailed description of your changes.
-
-## Rewards
-- Successful PR merges will be eligible for exciting prizes!
 
 ## Support
 For any queries or issues, please open an issue in the repository.
